@@ -52,8 +52,8 @@ The application will have the following screens:
 
 ## Wireframe Mockup
 
-<img width="1064" alt="1" src="https://github.com/cdamezcua/Upsolver/assets/88699709/2ec59ad1-28d3-4d7a-af30-fddf0aa9ed48">
-<img width="1064" alt="2" src="https://github.com/cdamezcua/Upsolver/assets/88699709/6889181a-1ed3-40af-aa8e-a503badf88fa">
-<img width="1064" alt="3" src="https://github.com/cdamezcua/Upsolver/assets/88699709/c90a01f0-1337-48fb-82e8-f4c4b70b967a">
-<img width="1064" alt="4" src="https://github.com/cdamezcua/Upsolver/assets/88699709/905ee146-f7c7-438f-8211-e58d831a86c1">
-<img width="1064" alt="5" src="https://github.com/cdamezcua/Upsolver/assets/88699709/8104d869-392b-4bc9-b61b-41665cbc208f">
+<img width="1064" alt="1" src="https://github.com/cdamezcua/Upsolver/assets/88699709/cc1d1de9-4e97-4e6f-bbc0-b255ae1ea2c6">
+<img width="1064" alt="2" src="https://github.com/cdamezcua/Upsolver/assets/88699709/fa2f89b3-98d6-4837-83b6-62e9c52d28e3">
+<img width="1064" alt="3" src="https://github.com/cdamezcua/Upsolver/assets/88699709/a3ff85d3-2cbf-45f1-8d7d-d44237d3c3ce">
+<img width="1064" alt="4" src="https://github.com/cdamezcua/Upsolver/assets/88699709/21b37b3f-2017-4f3b-acad-fcccd4503336">
+<img width="1064" alt="5" src="https://github.com/cdamezcua/Upsolver/assets/88699709/f8418bf1-cfae-4928-be93-24200d30ca96">

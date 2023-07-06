@@ -40,3 +40,20 @@ Upsolver is a tool designed specifically for competitive programmers and team co
 10.  As a coach, I want to view the progress of the teams I coach, to ensure that my assistance is benefiting them and to stay motivated to help them.
 11.  As a coach, I want to provide hints to my learners when they ask for them, so that they can overcome challenges and continue with their training.
 12.  As a coach, I want to see a summary of my teams' weekly progress, to evaluate their performance and consider it for future contest assignments.
+
+## Application Screens
+
+The application will have the following screens:
+- Teams
+- Contest Groups
+- Contest Group Problem's Table
+- Team's Information
+- Problemset
+
+## Wireframe Mockup
+
+<img width="1064" alt="1" src="https://github.com/cdamezcua/Upsolver/assets/88699709/2ec59ad1-28d3-4d7a-af30-fddf0aa9ed48">
+<img width="1064" alt="2" src="https://github.com/cdamezcua/Upsolver/assets/88699709/6889181a-1ed3-40af-aa8e-a503badf88fa">
+<img width="1064" alt="3" src="https://github.com/cdamezcua/Upsolver/assets/88699709/c90a01f0-1337-48fb-82e8-f4c4b70b967a">
+<img width="1064" alt="4" src="https://github.com/cdamezcua/Upsolver/assets/88699709/905ee146-f7c7-438f-8211-e58d831a86c1">
+<img width="1064" alt="5" src="https://github.com/cdamezcua/Upsolver/assets/88699709/8104d869-392b-4bc9-b61b-41665cbc208f">

@@ -1,5 +1,34 @@
 # Upsolver
 
+## Table of Contents
+
+- [Upsolver](#upsolver)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [User Context](#user-context)
+    - [Users Roles](#users-roles)
+    - [User Personas](#user-personas)
+      - [Of Contestants](#of-contestants)
+      - [Of Coaches](#of-coaches)
+    - [User Stories](#user-stories)
+  - [Application Screens](#application-screens)
+  - [Wireframe Mockup](#wireframe-mockup)
+  - [Technical Challenges](#technical-challenges)
+  - [Endpoints](#endpoints)
+    - [User](#user)
+  - [Data Model](#data-model)
+    - [User](#user-1)
+    - [Role](#role)
+    - [Team](#team)
+    - [Group](#group)
+    - [Division](#division)
+    - [Contest](#contest)
+    - [Chat](#chat)
+    - [ContestProblem](#contestproblem)
+    - [Problem](#problem)
+    - [Tag](#tag)
+    - [Submission](#submission)
+
 ## Overview
 
 Upsolver is a tool designed specifically for competitive programmers and team coaches, aimed at optimizing the upsolving process and streamlining team progress management.
@@ -57,3 +86,125 @@ The application will have the following screens:
 <img width="1064" alt="3" src="https://github.com/cdamezcua/Upsolver/assets/88699709/a3ff85d3-2cbf-45f1-8d7d-d44237d3c3ce">
 <img width="1064" alt="4" src="https://github.com/cdamezcua/Upsolver/assets/88699709/21b37b3f-2017-4f3b-acad-fcccd4503336">
 <img width="1064" alt="5" src="https://github.com/cdamezcua/Upsolver/assets/88699709/f8418bf1-cfae-4928-be93-24200d30ca96">
+
+## Technical Challenges
+
+Tentatively, the two technical challenges of this project will be:
+1. to integrate a web scratcher into the application to populate the contest group tables quickly, and 
+2. to make the discussion chats work in real time.
+>It is also proposed as a possible third technical challenge to add push notifications.
+
+## Endpoints
+
+### User
+
+| HTTP Verb 	| API Endpoint 	| Action                                                                 	|
+|-----------	|--------------	|------------------------------------------------------------------------	|
+| POST      	| /users       	| Create a new user in the database with the provided information.       	|
+| GET       	| /users/{id}  	| Retrieve the details of a specific user based on the provided user ID. 	|
+| PUT       	| /users/{id}  	| Update the details of a specific user based on the provided user ID.   	|
+| DELETE    	| /users/{id}  	| Delete a specific user based on the provided user ID.                  	|
+
+## Data Model
+
+![upsolver-data-model](https://github.com/cdamezcua/Upsolver/assets/88699709/1d5f9e61-32ce-4065-9961-2e3d17032372)
+
+### User
+
+| Key | Column Name | Data Type | Description |
+| --- | ----------- | --------- | ----------- |
+| PK  | id          | int       | Unique identifier for each user |
+| UK1 | username    | varchar   | Unique username chosen by the user |
+| UK2 | email       | varchar   | Unique email address of the user |
+|     | password    | varchar   | Encrypted password for the user's account |
+|     | name        | varchar   | Full name of the user |
+|     | creation_date | date    | Date when the user's account was created |
+
+### Role
+
+| Key | Column Name | Data Type | Description |
+| --- | ----------- | --------- | ----------- |
+| PK,FK1 | user_id | int | The primary key and foreign key referencing the User table |
+| PK,FK2 | team_id | int | The primary key and foreign key referencing the Team table |
+|     | name | varchar | The name of the role |
+
+### Team
+
+| Key | Column Name | Data Type | Description |
+| --- | ----------- | --------- | ----------- |
+| PK  | id          | int       | The primary key of the team |
+|     | name        | varchar   | The name of the team |
+|     | creation_date | date    | The date the team was created |
+
+### Group
+
+| Key | Column Name | Data Type | Description |
+| --- | ----------- | --------- | ----------- |
+| PK  | id          | int       | The primary key of the group |
+| FK  | team_id     | int       | The foreign key referencing the Team table |
+|     | url         | varchar   | The URL of the group |
+|     | name        | varchar   | The name of the group |
+|     | creation_date | date    | The date the group was created |
+
+### Division
+
+| Key | Column Name | Data Type | Description |
+| --- | ----------- | --------- | ----------- |
+| PK  | id          | int       | The primary key of the division |
+| FK  | group_id    | int       | The foreign key referencing the Group table |
+|     | name        | varchar   | The name of the division |
+
+### Contest
+
+| Key | Column Name | Data Type | Description |
+| --- | ----------- | --------- | ----------- |
+| PK  | id          | int       | The primary key of the contest |
+| FK  | division_id | int       | The foreign key referencing the Division table |
+|     | url         | varchar   | The URL of the contest |
+|     | name        | varchar   | The name of the contest |
+|     | start_date  | date      | The start date of the contest |
+
+### Chat
+
+| Key | Column Name | Data Type | Description |
+| --- | ----------- | --------- | ----------- |
+| PK,FK1 | team_id | int | The primary key and foreign key referencing the Team table |
+| PK,FK2 | problem_id | int | The primary key and foreign key referencing the Problem table |
+|     | tbd | tbd | To be determined |
+
+### ContestProblem
+
+| Key | Column Name | Data Type | Description |
+| --- | ----------- | --------- | ----------- |
+| PK,FK1 | contest_id | int | The primary key and foreign key referencing the Contest table |
+| PK,FK2 | problem_id | int | The primary key and foreign key referencing the Problem table |
+|     | url | varchar | The URL of the problem |
+|     | index | varchar | The index of the problem |
+|     | solved | int | Number of competitors who solved the problem during the contest |
+
+### Problem
+
+| Key | Column Name | Data Type | Description |
+| --- | ----------- | --------- | ----------- |
+| PK  | id          | int       | The primary key of the problem |
+|     | url         | varchar   | The URL of the problem |
+|     | name        | varchar   | The name of the problem |
+
+### Tag
+
+| Key | Column Name | Data Type | Description |
+| --- | ----------- | --------- | ----------- |
+| PK  | id          | int       | The primary key of the tag |
+| FK  | user_id     | int       | The foreign key referencing the User table |
+| FK  | problem_id  | int       | The foreign key referencing the Problem table |
+|     | name        | varchar   | The name of the tag |
+
+### Submission
+
+| Key | Column Name | Data Type | Description |
+| --- | ----------- | --------- | ----------- |
+| PK  | id          | int       | The primary key of the submission |
+| FK  | user_id     | int       | The foreign key referencing the User table |
+| FK  | problem_id  | int       | The foreign key referencing the Problem table |
+|     | veredict    | varchar   | The verdict of the submission |
+|     | creation_date | date    | The date the submission was created |

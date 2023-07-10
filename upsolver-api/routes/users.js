@@ -1,8 +1,9 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { User } from "../models/index.js";
+import { User, InvalidatedJWT } from "../models/index.js";
 import dotenv from "dotenv";
+import verifyToken from "../middleware/auth.js";
 
 dotenv.config();
 
@@ -46,7 +47,7 @@ router.post("/register", async (req, res) => {
       { user_id: user.id, username: username.toLowerCase() },
       process.env.TOKEN_KEY,
       {
-        expiresIn: "2h",
+        expiresIn: "2m",
       }
     );
 
@@ -75,7 +76,7 @@ router.post("/login", async (req, res) => {
         { user_id: user.id, username: username.toLowerCase() },
         process.env.TOKEN_KEY,
         {
-          expiresIn: "2h",
+          expiresIn: "2m",
         }
       );
 
@@ -83,10 +84,47 @@ router.post("/login", async (req, res) => {
 
       res.status(200).json(user);
     } else {
-      res.status(400).json({ error: "[!] Invalid Credentials" });
+      res.status(400).json({ error: "[!] Invalid token" });
     }
   } catch (err) {
     console.log(err);
+  }
+});
+
+router.get("/is-logged-in", async (req, res) => {
+  const token =
+    req.body.token || req.query.token || req.headers["x-access-token"];
+  if (!token) {
+    res
+      .status(200)
+      .json({ isLoggedIn: false, reason: "[!] No token provided" });
+  } else {
+    try {
+      const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+      const invalidated = await InvalidatedJWT.findOne({ where: { token } });
+      if (invalidated) {
+        res
+          .status(200)
+          .json({ isLoggedIn: false, reason: "[!] Invalidated token"});
+      } else {
+        res.status(200).json({ isLoggedIn: true, reason: "Valid token" });
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(200).json({ isLoggedIn: false, reason: "[!] Invalid token" });
+    }
+  }
+});
+
+router.post("/logout", verifyToken, async (req, res) => {
+  try {
+    const token =
+      req.body.token || req.query.token || req.headers["x-access-token"];
+    await InvalidatedJWT.create({ token });
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ error: "[!] Invalid token" });
   }
 });
 

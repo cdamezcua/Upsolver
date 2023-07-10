@@ -1,0 +1,37 @@
+[
+    {
+        "teamId": 1,
+        "userId": 1,
+        "name": "contestant"
+    },
+    {
+        "teamId": 1,
+        "userId": 2,
+        "name": "contestant"
+    },
+    {
+        "teamId": 1,
+        "userId": 3,
+        "name": "contestant"
+    },
+    {
+        "teamId": 1,
+        "userId": 6,
+        "name": "coach"
+    },
+    {
+        "teamId": 2,
+        "userId": 4,
+        "name": "contestant"
+    },
+    {
+        "teamId": 2,
+        "userId": 5,
+        "name": "contestant"
+    },
+    {
+        "teamId": 2,
+        "userId": 6,
+        "name": "contestant"
+    }
+]

@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "username": "cdamezcua",
+        "email": "cdamezcua@outlook.com",
+        "password": "1234",
+        "name": "Carlos David Amezcua Canales",
+        "cfHandle": "cdamezcua"
+    },
+    {
+        "id": 2,
+        "username": "germanking6",
+        "email": "germanking6@outlook.com",
+        "password": "1234",
+        "name": "Germán Andrés Jaramillo Ramirez",
+        "cfHandle": "germanking6"
+    },
+    {
+        "id": 3,
+        "username": "karlamun",
+        "email": "karlamun@outlook.com",
+        "password": "1234",
+        "name": "Karla",
+        "cfHandle": "karlamun"
+    },
+    {
+        "id": 4,
+        "username": "IvanBorquez",
+        "email": "IvanBorquez@outlook.com",
+        "password": "1234",
+        "name": "Jorge Iván Bórquez Meza",
+        "cfHandle": "IvanBorquez"
+    },
+    {
+        "id": 5,
+        "username": "Franco1010",
+        "email": "Franco1010@outlook.com",
+        "password": "1234",
+        "name": "Franco Ramirez",
+        "cfHandle": "Franco1010"
+    },
+    {
+        "id": 6,
+        "username": "crystaalroo",
+        "email": "crystaalroo@outlook.com",
+        "password": "1234",
+        "name": "Aida Crystal Rodriguez Zoto",
+        "cfHandle": "crystaalroo"
+    }
+]

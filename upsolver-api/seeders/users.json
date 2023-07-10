@@ -46,5 +46,13 @@
         "password": "1234",
         "name": "Aida Crystal Rodriguez Zoto",
         "cfHandle": "crystaalroo"
+    },
+    {
+        "id": 7,
+        "username": "netodios",
+        "email": "netodios@outlook.com",
+        "password": "1234",
+        "name": "Neto",
+        "cfHandle": "netodios"
     }
 ]

@@ -10,6 +10,8 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
   const { updateUser } = useContext(UserContext);
 
+  const navigate = useNavigate();
+
   const handleLogin = async (e) => {
     try {
       e.preventDefault();
@@ -19,9 +21,9 @@ export default function LoginForm() {
         body: JSON.stringify({ username, password }),
         credentials: "include",
       });
-      const data = await response.json();
-      if (data.username) {
-        updateUser(data);
+      const user = await response.json();
+      if (user.username) {
+        updateUser(user);
         navigate("/");
       } else {
         alert("[!] Login failed");
@@ -30,8 +32,6 @@ export default function LoginForm() {
       console.error("[!] Login failed", err.message);
     }
   };
-
-  const navigate = useNavigate();
 
   return (
     <Paper className="login-form-container" elevation={24} sx={{ p: 4 }}>

@@ -47,7 +47,7 @@ router.post("/register", async (req, res) => {
       { user_id: user.id, username: username.toLowerCase() },
       process.env.TOKEN_KEY,
       {
-        expiresIn: "2m",
+        expiresIn: "24h",
       }
     );
 
@@ -76,7 +76,7 @@ router.post("/login", async (req, res) => {
         { user_id: user.id, username: username.toLowerCase() },
         process.env.TOKEN_KEY,
         {
-          expiresIn: "2m",
+          expiresIn: "24h",
         }
       );
 

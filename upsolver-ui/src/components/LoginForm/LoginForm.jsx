@@ -24,7 +24,7 @@ export default function LoginForm() {
       const user = await response.json();
       if (user.username) {
         updateUser(user);
-        navigate("/");
+        navigate("/teams/my");
       } else {
         alert("[!] Login failed");
       }

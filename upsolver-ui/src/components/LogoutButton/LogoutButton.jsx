@@ -19,6 +19,10 @@ export default function LogoutButton() {
       if (response.status === 200) {
         updateUser(null);
         <Navigate to="/login" replace={true} />;
+        console.log("Logout successful");
+      }
+      else {
+        console.error("[!] Logout failed", response.status);
       }
     } catch (err) {
       console.error("[!] Logout failed", err.message);

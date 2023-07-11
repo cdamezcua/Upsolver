@@ -1,0 +1,15 @@
+.user-nav-card-container {
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  background-color: white;
+}
+
+.user-nav-card-container .avatar-container {
+  margin-right: 10px;
+}
+
+.user-nav-card-container .username {
+  margin-right: 5px;
+}

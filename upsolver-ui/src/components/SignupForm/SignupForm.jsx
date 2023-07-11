@@ -28,7 +28,7 @@ export default function SignupForm() {
       const data = await response.json();
       if (data.username) {
         updateUser(data);
-        navigate("/");
+        navigate("/teams/my");
       } else {
         alert("[!] Signup failed");
       }

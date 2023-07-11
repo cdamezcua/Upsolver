@@ -1,0 +1,25 @@
+.navbar-container {
+  display: flex;
+  flex-grow: 1;
+}
+
+.navbar-container .navbar {
+  padding: 5px 20px;
+}
+
+.navbar-container .pages-container {
+  display: flex;
+  flex-grow: 1;
+}
+
+.navbar-container .page-button {
+  margin-top: 2;
+  margin-bottom: 2;
+  color: "white";
+  display: "block";
+}
+
+.navbar-container .page-button .button-link {
+  text-decoration: none;
+  color: inherit;
+}

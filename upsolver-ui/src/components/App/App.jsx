@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { UserContext } from "../../UserContext";
 import LoginForm from "../LoginForm/LoginForm";
 import SignupForm from "../SignupForm/SignupForm";
-import { Container, Typography } from "@mui/material";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Container } from "@mui/material";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.jsx";
+import TeamsScreen from "../TeamsScreen/TeamsScreen";
 
 export default function App() {
   const [user, setUser] = useState(() => {
@@ -56,18 +57,13 @@ export default function App() {
               path="/"
               element={
                 <ProtectedRoute
-                  element={
-                    <Container
-                      maxWidth="gx"
-                      sx={{ display: "flex", justifyContent: "center" }}
-                    >
-                      <Typography variant="h3" component="h1">
-                        Welcome, {user ? user.username : "Guest"}!
-                      </Typography>
-                    </Container>
-                  }
+                  element={<Navigate to="/teams/my" replace={true} />}
                 />
               }
+            />
+            <Route
+              path="/teams/my"
+              element={<ProtectedRoute element={<TeamsScreen />} />}
             />
             <Route
               path="login"

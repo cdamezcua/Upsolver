@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import UserNavCard from "../UserNavCard/UserNavCard";
 import { Link } from "react-router-dom";
+import LogoutButton from "../LogoutButton/LogoutButton";
 
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -60,7 +61,7 @@ export default function Navbar() {
             onClose={handleCloseUserMenu}
           >
             <MenuItem onClick={handleCloseUserMenu}>
-              <button>PLACEHOLDER</button>
+              <LogoutButton />
             </MenuItem>
           </Menu>
         </Toolbar>

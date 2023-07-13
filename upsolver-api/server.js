@@ -1,24 +1,21 @@
 import express from "express";
-import dotenv from "dotenv";
 import router from "./routes/index.js";
 import cors from "cors";
-
-dotenv.config();
+import { FRONT_END_BASE_URL } from "./constants/urls.js";
+import { PORT } from "./constants/config.js";
 
 const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: FRONT_END_BASE_URL,
     credentials: true,
   })
 );
 
-const port = process.env.PORT || 3001;
-
 app.use(express.json());
 app.use(router);
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
 });

@@ -4,6 +4,11 @@ import jwt from "jsonwebtoken";
 import { User, InvalidatedJWT } from "../models/index.js";
 import dotenv from "dotenv";
 import verifyToken from "../middleware/auth.js";
+import {
+  ROUNDS_OF_HASHING,
+  TOKEN_LIFETIME,
+  HEADER_TOKEN_KEY,
+} from "../constants/config.js";
 
 dotenv.config();
 
@@ -33,7 +38,7 @@ router.post("/register", async (req, res) => {
         .json({ error: "[!] Email already used with another account" });
     }
 
-    const encryptedPassword = await bcrypt.hash(password, 10);
+    const encryptedPassword = await bcrypt.hash(password, ROUNDS_OF_HASHING);
 
     const user = await User.create({
       username: username.toLowerCase(),
@@ -47,7 +52,7 @@ router.post("/register", async (req, res) => {
       { user_id: user.id, username: username.toLowerCase() },
       process.env.TOKEN_KEY,
       {
-        expiresIn: "24h",
+        expiresIn: TOKEN_LIFETIME,
       }
     );
 
@@ -76,7 +81,7 @@ router.post("/login", async (req, res) => {
         { user_id: user.id, username: username.toLowerCase() },
         process.env.TOKEN_KEY,
         {
-          expiresIn: "24h",
+          expiresIn: TOKEN_LIFETIME,
         }
       );
 
@@ -93,7 +98,7 @@ router.post("/login", async (req, res) => {
 
 router.get("/is-logged-in", async (req, res) => {
   const token =
-    req.body.token || req.query.token || req.headers["x-access-token"];
+    req.body.token || req.query.token || req.headers[HEADER_TOKEN_KEY];
   if (!token) {
     res
       .status(200)
@@ -105,7 +110,7 @@ router.get("/is-logged-in", async (req, res) => {
       if (invalidated) {
         res
           .status(200)
-          .json({ isLoggedIn: false, reason: "[!] Invalidated token"});
+          .json({ isLoggedIn: false, reason: "[!] Invalidated token" });
       } else {
         res.status(200).json({ isLoggedIn: true, reason: "Valid token" });
       }
@@ -119,7 +124,7 @@ router.get("/is-logged-in", async (req, res) => {
 router.post("/logout", verifyToken, async (req, res) => {
   try {
     const token =
-      req.body.token || req.query.token || req.headers["x-access-token"];
+      req.body.token || req.query.token || req.headers[HEADER_TOKEN_KEY];
     await InvalidatedJWT.create({ token });
     res.status(200).json({ message: "Logged out successfully" });
   } catch (err) {

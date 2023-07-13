@@ -1,10 +1,7 @@
 import express from "express";
 import { Team } from "../models/index.js";
-import dotenv from "dotenv";
 import verifyToken from "../middleware/auth.js";
 import { sequelize } from "../database.js";
-
-dotenv.config();
 
 const router = express.Router();
 

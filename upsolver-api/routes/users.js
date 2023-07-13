@@ -56,7 +56,7 @@ router.post("/register", async (req, res) => {
       }
     );
 
-    user.update({ token });
+    await user.update({ token });
 
     res.status(201).json(user);
   } catch (err) {
@@ -85,7 +85,7 @@ router.post("/login", async (req, res) => {
         }
       );
 
-      user.update({ token });
+      await user.update({ token });
 
       res.status(200).json(user);
     } else {

@@ -25,19 +25,20 @@ userData.forEach(async (user) => {
 
 const seedDatabase = async () => {
   try {
-    await sequelize.query("DROP TABLE IF EXISTS users");
-    await sequelize.query("DROP TABLE IF EXISTS roles");
-    await sequelize.query("DROP TABLE IF EXISTS teams");
+    await Promise.all([
+      sequelize.query("DROP TABLE IF EXISTS users"),
+      sequelize.query("DROP TABLE IF EXISTS roles"),
+      sequelize.query("DROP TABLE IF EXISTS teams"),
+      sequelize.query("DROP TABLE IF EXISTS invalidatedJWTs"),
+    ]);
 
     await sequelize.sync({ alter: true });
-    console.log("All models were synchronized successfully.");
 
-    await User.bulkCreate(userData);
-    console.log("Users were synchronized successfully.");
-    await Team.bulkCreate(teamData);
-    console.log("Teams were synchronized successfully.");
-    await Role.bulkCreate(roleData);
-    console.log("Roles were synchronized successfully.");
+    await Promise.all([
+      User.bulkCreate(userData),
+      Team.bulkCreate(teamData),
+      Role.bulkCreate(roleData),
+    ]);
   } catch (error) {
     console.error("Error seeding data:", error);
   } finally {

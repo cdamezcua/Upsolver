@@ -20,7 +20,10 @@ export default function TeamGrid() {
             "x-access-token": user?.token,
           },
         });
-        const teams = await response.json();
+        let teams = await response.json();
+        if (response.status !== 200) {
+          teams = [];
+        }
         setTeams(teams);
       } catch (error) {
         console.log(error);

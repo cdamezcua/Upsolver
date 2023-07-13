@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import { User, Team, Role } from "./models/index.js";
 import { sequelize } from "./database.js";
 import bcrypt from "bcrypt";
+import { ROUNDS_OF_HASHING } from "./constants/config.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,7 +20,7 @@ const roleData = JSON.parse(
 );
 
 userData.forEach(async (user) => {
-  user.password = await bcrypt.hash(user.password, 10);
+  user.password = await bcrypt.hash(user.password, ROUNDS_OF_HASHING);
 });
 
 const seedDatabase = async () => {

@@ -1,12 +1,13 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { InvalidatedJWT } from "../models/index.js";
+import { HEADER_TOKEN_KEY } from "../constants/config.js";
 
 dotenv.config();
 
 const verifyToken = async (req, res, next) => {
   const token =
-    req.body.token || req.query.token || req.headers["x-access-token"];
+    req.body.token || req.query.token || req.headers[HEADER_TOKEN_KEY];
   if (!token) {
     return res.status(401).send("[!] A token is required for authentication");
   }

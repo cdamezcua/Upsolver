@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "teamId": 3,
+        "url": "https://codeforces.com/group/2Cle9xU7oR",
+        "name": "Training Camp Colombia 2022"
+    },
+    {
+        "id": 2,
+        "teamId": 3,
+        "url": "https://codeforces.com/group/4zVk9dZl6Q",
+        "name": "Training Camp Argentina - 2022"
+    },
+    {
+        "id": 3,
+        "teamId": 3,
+        "url": "https://codeforces.com/group/DVzG4G4yZx",
+        "name": "Training Camp Mexico 2023"
+    }
+]

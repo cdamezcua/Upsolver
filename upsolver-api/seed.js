@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { User, Team, Role } from "./models/index.js";
+import { User, Team, Role, Group } from "./models/index.js";
 import { sequelize } from "./database.js";
 import bcrypt from "bcrypt";
 import { ROUNDS_OF_HASHING } from "./constants/config.js";
@@ -19,6 +19,10 @@ const roleData = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "./seeders/roles.json"), "utf8")
 );
 
+const groupData = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "./seeders/groups.json"), "utf8")
+);
+
 userData.forEach(async (user) => {
   user.password = await bcrypt.hash(user.password, ROUNDS_OF_HASHING);
 });
@@ -26,10 +30,11 @@ userData.forEach(async (user) => {
 const seedDatabase = async () => {
   try {
     await Promise.all([
-      sequelize.query("DROP TABLE IF EXISTS users"),
-      sequelize.query("DROP TABLE IF EXISTS roles"),
-      sequelize.query("DROP TABLE IF EXISTS teams"),
       sequelize.query("DROP TABLE IF EXISTS invalidatedJWTs"),
+      sequelize.query("DROP TABLE IF EXISTS users"),
+      sequelize.query("DROP TABLE IF EXISTS teams"),
+      sequelize.query("DROP TABLE IF EXISTS roles"),
+      sequelize.query("DROP TABLE IF EXISTS groups"),
     ]);
 
     await sequelize.sync({ alter: true });
@@ -38,6 +43,7 @@ const seedDatabase = async () => {
       User.bulkCreate(userData),
       Team.bulkCreate(teamData),
       Role.bulkCreate(roleData),
+      Group.bulkCreate(groupData),
     ]);
   } catch (error) {
     console.error("Error seeding data:", error);

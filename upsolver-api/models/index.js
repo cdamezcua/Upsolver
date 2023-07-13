@@ -1,6 +1,7 @@
+import { InvalidatedJWT } from "./invalidatedJWT.js";
 import { User } from "./user.js";
 import { Role } from "./role.js";
 import { Team } from "./team.js";
-import { InvalidatedJWT } from "./invalidatedJWT.js";
+import { Group } from "./group.js";
 
-export { User, Role, Team, InvalidatedJWT };
+export { InvalidatedJWT, User, Role, Team, Group };

@@ -2,11 +2,15 @@ import express from "express";
 import { Team } from "../models/index.js";
 import verifyToken from "../middleware/auth.js";
 import { sequelize } from "../database.js";
+import errorHandler from "../middleware/errorHandler.js";
+import tryCatch from "../utils/tryCatch.js";
 
 const router = express.Router();
 
-router.get("/", verifyToken, async (req, res) => {
-  try {
+router.get(
+  "/",
+  verifyToken,
+  tryCatch(async (req, res) => {
     const { user } = req;
     const getTeams = `
         SELECT 
@@ -31,10 +35,9 @@ router.get("/", verifyToken, async (req, res) => {
       mapToModel: true,
     });
     res.status(200).json(teams);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "[!] Internal server error" });
-  }
-});
+  })
+);
+
+router.use(errorHandler);
 
 export default router;

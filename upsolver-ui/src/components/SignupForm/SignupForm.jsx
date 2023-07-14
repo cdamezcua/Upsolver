@@ -26,8 +26,8 @@ export default function SignupForm() {
         credentials: "include",
       });
       const data = await response.json();
-      if (data.username) {
-        updateUser(data);
+      if (data.user) {
+        updateUser(data.user);
         navigate("/teams/my");
       } else {
         alert("[!] Signup failed");

@@ -21,9 +21,9 @@ export default function LoginForm() {
         body: JSON.stringify({ username, password }),
         credentials: "include",
       });
-      const user = await response.json();
-      if (user.username) {
-        updateUser(user);
+      const data = await response.json();
+      if (data.user) {
+        updateUser(data.user);
         navigate("/teams/my");
       } else {
         alert("[!] Login failed");

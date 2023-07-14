@@ -99,6 +99,41 @@ router.post(
   })
 );
 
+router.post(
+  "/:invitationId/reject",
+  verifyToken,
+  tryCatch(async (req, res) => {
+    const getInvetee = `
+        SELECT
+            inviteeId 
+        FROM
+            invitations
+        WHERE
+            id = ${req.params.invitationId};
+    `;
+    const [invitee] = await sequelize.query(getInvetee, {
+      type: sequelize.QueryTypes.SELECT,
+    });
+    const inviteeId = invitee.inviteeId;
+    if (inviteeId !== req.user.user_id) {
+      throw new AppError(
+        403,
+        "You are not allowed to reject other's invitations"
+      );
+    }
+    const deleteInvitation = `
+        DELETE FROM
+            invitations
+        WHERE
+            id = ${req.params.invitationId};
+    `;
+    await sequelize.query(deleteInvitation, {
+      type: sequelize.QueryTypes.DELETE,
+    });
+    res.status(200).json({ message: "Invitation rejected" });
+  })
+);
+
 router.use(errorHandler);
 
 export default router;

@@ -14,7 +14,7 @@ export default function TeamCard({ team }) {
     <Card className="team-card">
       <CardActionArea>
         <Link
-          to={`/team/${team.id}`}
+          to={`/team/${team.id}/groups`}
           style={{
             textDecoration: "none",
             color: "inherit",

@@ -8,6 +8,8 @@ import { Container } from "@mui/material";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.jsx";
 import TeamsScreen from "../TeamsScreen/TeamsScreen";
+import GroupsScreen from "../GroupsScreen/GroupsScreen";
+import MembersScreen from "../MembersScreen/MembersScreen";
 
 export default function App() {
   const [user, setUser] = useState(() => {
@@ -52,7 +54,7 @@ export default function App() {
     <div className="App">
       <UserContext.Provider value={{ user, updateUser }}>
         <BrowserRouter>
-          <Routes basename="/">
+          <Routes>
             <Route
               path="/"
               element={
@@ -60,10 +62,6 @@ export default function App() {
                   element={<Navigate to="/teams/my" replace={true} />}
                 />
               }
-            />
-            <Route
-              path="/teams/my"
-              element={<ProtectedRoute element={<TeamsScreen />} />}
             />
             <Route
               path="login"
@@ -86,6 +84,18 @@ export default function App() {
                   <SignupForm />
                 </Container>
               }
+            />
+            <Route
+              path="/teams/my"
+              element={<ProtectedRoute element={<TeamsScreen />} />}
+            />
+            <Route
+              path="/team/:teamId/groups"
+              element={<ProtectedRoute element={<GroupsScreen />} />}
+            />
+            <Route
+              path="/team/:teamId/members"
+              element={<ProtectedRoute element={<MembersScreen />} />}
             />
           </Routes>
         </BrowserRouter>

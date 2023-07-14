@@ -1,0 +1,65 @@
+[
+    {
+        "id": 1,
+        "inviterId": 2,
+        "teamId": 1,
+        "inviteeId": 1,
+        "role": "contestant",
+        "createdAt": "2021-05-04T15:00:00.000Z",
+        "updatedAt": "2021-05-04T15:00:00.000Z"
+    },
+    {
+        "id": 2,
+        "inviterId": 3,
+        "teamId": 2,
+        "inviteeId": 1,
+        "role": "contestant",
+        "createdAt": "2021-05-04T15:00:00.000Z",
+        "updatedAt": "2021-05-04T15:00:00.000Z"
+    },
+    {
+        "id": 3,
+        "inviterId": 4,
+        "teamId": 3,
+        "inviteeId": 1,
+        "role": "contestant",
+        "createdAt": "2021-05-04T15:00:00.000Z",
+        "updatedAt": "2021-05-04T15:00:00.000Z"
+    },
+    {
+        "id": 4,
+        "inviterId": 1,
+        "teamId": 1,
+        "inviteeId": 5,
+        "role": "contestant",
+        "createdAt": "2021-05-04T15:00:00.000Z",
+        "updatedAt": "2021-05-04T15:00:00.000Z"
+    },
+    {
+        "id": 5,
+        "inviterId": 1,
+        "teamId": 1,
+        "inviteeId": 6,
+        "role": "contestant",
+        "createdAt": "2021-05-04T15:00:00.000Z",
+        "updatedAt": "2021-05-04T15:00:00.000Z"
+    },
+    {
+        "id": 6,
+        "inviterId": 1,
+        "teamId": 1,
+        "inviteeId": 7,
+        "role": "contestant",
+        "createdAt": "2021-05-04T15:00:00.000Z",
+        "updatedAt": "2021-05-04T15:00:00.000Z"
+    },
+    {
+        "id": 7,
+        "inviterId": 2,
+        "teamId": 4,
+        "inviteeId": 1,
+        "role": "contestant",
+        "createdAt": "2021-05-04T15:00:00.000Z",
+        "updatedAt": "2021-05-04T15:00:00.000Z"
+    }
+]

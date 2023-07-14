@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { UserContext } from "../../UserContext.js";
 import { useEffect, useContext } from "react";
+import Subtitle from "../Subtitle/Subtitle";
 
 export default function MembersScreen() {
   const { user } = useContext(UserContext);
@@ -69,20 +70,11 @@ export default function MembersScreen() {
   return (
     <>
       <Navbar />
-      <Typography
-        variant="h6"
-        sx={{
-          height: "54px",
-          m: "auto 20px",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
+      <Subtitle>
         {team.name && team.university
           ? team.name + " - " + team.university
           : ""}
-      </Typography>
-      <Divider />
+      </Subtitle>
       <Stack spacing={2} direction="row" sx={{ m: "20px" }}>
         <Button variant="contained" color="primary" className="page-button">
           <Link className="button-link" to={`/team/${teamId}/groups`}>
@@ -98,15 +90,6 @@ export default function MembersScreen() {
       <Box sx={{ m: "20px" }}>
         <TableContainer component={Paper}>
           <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <Typography variant="h6">Members</Typography>
-                </TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            </TableHead>
             <TableBody>
               {members.map((user) => (
                 <TableRow key={user.id}>

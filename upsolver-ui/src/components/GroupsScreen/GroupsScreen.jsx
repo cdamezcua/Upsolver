@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { UserContext } from "../../UserContext.js";
 import { useEffect, useContext } from "react";
+import Subtitle from "../Subtitle/Subtitle";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -81,20 +82,11 @@ export default function GroupsScreen() {
   return (
     <>
       <Navbar />
-      <Typography
-        variant="h6"
-        sx={{
-          height: "54px",
-          m: "auto 20px",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
+      <Subtitle>
         {team.name && team.university
           ? team.name + " - " + team.university
           : ""}
-      </Typography>
-      <Divider />
+      </Subtitle>
       <Stack spacing={2} direction="row" sx={{ m: "20px" }}>
         <Button variant="contained" color="primary" className="page-button">
           <Link className="button-link" to={`/team/${teamId}/groups`}>
@@ -113,7 +105,7 @@ export default function GroupsScreen() {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <Typography variant="h6">Groups</Typography>
+                  <Typography variant="h6">Group</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant="h6">Progress</Typography>

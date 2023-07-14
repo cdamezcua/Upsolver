@@ -57,7 +57,7 @@ router.post(
     );
     await user.update({ token });
 
-    res.status(201).json(user);
+    res.status(201).json({ user });
   })
 );
 
@@ -88,7 +88,7 @@ router.post(
 
     await user.update({ token });
 
-    res.status(200).json(user);
+    res.status(200).json({ user });
   })
 );
 

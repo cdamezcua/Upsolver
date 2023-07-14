@@ -53,5 +53,10 @@
         "teamId": 3,
         "userId": 6,
         "name": "coach"
+    },
+    {
+        "teamId": 4,
+        "userId": 2,
+        "name": "contestant"
     }
 ]

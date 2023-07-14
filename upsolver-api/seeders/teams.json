@@ -13,5 +13,10 @@
         "id": 3,
         "name": "Tsurus Tuneados",
         "university": "Tecnológico de Monterrey"
+    },
+    {
+        "id": 4,
+        "name": "Los Seguidores de Karel",
+        "university": "Tecnológico de Monterrey"
     }
 ]

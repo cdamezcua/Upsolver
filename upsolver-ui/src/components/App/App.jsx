@@ -10,6 +10,7 @@ import ProtectedRoute from "../ProtectedRoute/ProtectedRoute.jsx";
 import TeamsScreen from "../TeamsScreen/TeamsScreen";
 import GroupsScreen from "../GroupsScreen/GroupsScreen";
 import MembersScreen from "../MembersScreen/MembersScreen";
+import InboxScreen from "../InboxScreen/InboxScreen";
 
 export default function App() {
   const [user, setUser] = useState(() => {
@@ -96,6 +97,10 @@ export default function App() {
             <Route
               path="/team/:teamId/members"
               element={<ProtectedRoute element={<MembersScreen />} />}
+            />
+            <Route
+              path="/inbox"
+              element={<ProtectedRoute element={<InboxScreen />} />}
             />
           </Routes>
         </BrowserRouter>

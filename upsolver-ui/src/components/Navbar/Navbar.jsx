@@ -13,6 +13,8 @@ import {
 import UserNavCard from "../UserNavCard/UserNavCard";
 import { Link } from "react-router-dom";
 import LogoutButton from "../LogoutButton/LogoutButton";
+import InboxIcon from "@mui/icons-material/Inbox";
+import { IconButton } from "@mui/material";
 
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -41,6 +43,11 @@ export default function Navbar() {
               </Link>
             </Button>
           </Box>
+          <IconButton color="inherit" sx={{ marginRight: "10px" }} size="large">
+            <Link className="button-link" to="/inbox">
+              <InboxIcon />
+            </Link>
+          </IconButton>
           <ButtonBase onClick={handleOpenUserMenu}>
             <UserNavCard />
           </ButtonBase>

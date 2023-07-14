@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { User, Team, Role, Group } from "./models/index.js";
+import { User, Team, Role, Group, Invitation } from "./models/index.js";
 import { sequelize } from "./database.js";
 import bcrypt from "bcrypt";
 import { ROUNDS_OF_HASHING } from "./constants/config.js";
@@ -23,6 +23,10 @@ const groupData = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "./seeders/groups.json"), "utf8")
 );
 
+const invitationData = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "./seeders/invitations.json"), "utf8")
+);
+
 userData.forEach(async (user) => {
   user.password = await bcrypt.hash(user.password, ROUNDS_OF_HASHING);
 });
@@ -35,6 +39,7 @@ const seedDatabase = async () => {
       sequelize.query("DROP TABLE IF EXISTS teams"),
       sequelize.query("DROP TABLE IF EXISTS roles"),
       sequelize.query("DROP TABLE IF EXISTS groups"),
+      sequelize.query("DROP TABLE IF EXISTS invitations"),
     ]);
 
     await sequelize.sync({ alter: true });
@@ -44,6 +49,7 @@ const seedDatabase = async () => {
       Team.bulkCreate(teamData),
       Role.bulkCreate(roleData),
       Group.bulkCreate(groupData),
+      Invitation.bulkCreate(invitationData),
     ]);
   } catch (error) {
     console.error("Error seeding data:", error);

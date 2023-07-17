@@ -17,6 +17,7 @@ import { UserContext } from "../../UserContext.js";
 import { useEffect, useContext } from "react";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import Subtitle from "../Subtitle/Subtitle";
+import { RANKING_COLORS } from "../../constants/config.js";
 
 export default function InvoxScreen() {
   const { user } = useContext(UserContext);
@@ -84,9 +85,7 @@ export default function InvoxScreen() {
   return (
     <>
       <Navbar />
-      <Subtitle>
-        Inbox
-      </Subtitle>
+      <Subtitle>Inbox</Subtitle>
       <Box sx={{ m: "20px" }}>
         <TableContainer component={Paper}>
           <Box
@@ -116,11 +115,33 @@ export default function InvoxScreen() {
             <TableBody>
               {invitations.map((invitation) => (
                 <TableRow key={invitation.id}>
-                  <TableCell>{invitation.inviter}</TableCell>
-                  <TableCell>{invitation.team}</TableCell>
-                  <TableCell>{invitation.role}</TableCell>
                   <TableCell>
-                    {new Date(invitation.createdAt).toLocaleDateString()}
+                    <Stack direction="row" spacing="16px" alignItems="center">
+                      <Avatar
+                        src={invitation.inviterAvatar}
+                        variant="square"
+                        sx={{ width: 50, height: 50 }}
+                      />
+                      <Box sx={{ display: "flex", flexDirection: "column" }}>
+                        <Typography variant="body1" noWrap>
+                          {invitation.inviterName}
+                        </Typography>
+                        <Typography noWrap variant="subtitle2" color={RANKING_COLORS[invitation.inviterRank]}>
+                          {invitation.inviterUsername}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body1">{invitation.team}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body1">{invitation.role}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body1">
+                      {new Date(invitation.createdAt).toLocaleDateString()}
+                    </Typography>
                   </TableCell>
                   <TableCell>
                     <Stack direction="row" spacing={2}>

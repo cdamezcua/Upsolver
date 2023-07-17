@@ -5,6 +5,7 @@ import { sequelize } from "../database.js";
 import errorHandler from "../middleware/errorHandler.js";
 import tryCatch from "../utils/tryCatch.js";
 import verifyTeamMembership from "../middleware/verifyTeamMembership.js";
+import AppError from "../utils/AppError.js";
 
 const router = express.Router();
 
@@ -170,6 +171,31 @@ router.post(
     });
 
     res.status(201).json({ invitation });
+  })
+);
+
+router.delete(
+  "/:teamId/invitations/:invitationId",
+  verifyToken,
+  verifyTeamMembership,
+  tryCatch(async (req, res) => {
+    const { invitationId } = req.params;
+    const invitation = await Invitation.findOne({
+      where: { id: invitationId, teamId: req.params.teamId },
+    });
+    if (!invitation) {
+      throw new AppError(404, "Invitation not found");
+    }
+    const deletedInvitation = `
+        DELETE FROM
+            invitations
+        WHERE
+            id = ${invitationId};
+    `;
+    await sequelize.query(deletedInvitation, {
+      type: sequelize.QueryTypes.DELETE,
+    });
+    res.status(204).json({ message: "Invitation deleted successfully" });
   })
 );
 

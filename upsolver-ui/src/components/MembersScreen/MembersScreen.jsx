@@ -94,6 +94,11 @@ export default function MembersScreen() {
               Members
             </Link>
           </Button>
+          <Button variant="contained" color="primary" className="page-button">
+            <Link className="button-link" to={`/team/${teamId}/invitations`}>
+              Invitations
+            </Link>
+          </Button>
         </Stack>
       </Stack>
       <Box sx={{ m: "20px" }}>

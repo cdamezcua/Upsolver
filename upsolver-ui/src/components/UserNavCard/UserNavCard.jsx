@@ -9,7 +9,7 @@ export default function UserNavCard() {
   return (
     <Box className="user-nav-card-container">
       <Box className="avatar-container">
-        <Avatar variant="square">{user.username[0]}</Avatar>
+        <Avatar alt={user.username} src={user.avatar} variant="square" />
       </Box>
       <Typography
         className="username"

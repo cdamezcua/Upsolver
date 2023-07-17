@@ -15,6 +15,9 @@ export const Role = sequelize.define("role", {
   name: {
     type: DataTypes.STRING(255),
     allowNull: false,
+    validate: {
+      isIn: [["contestant", "coach"]],
+    },
   },
   createdAt: {
     type: DataTypes.DATE,

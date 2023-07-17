@@ -79,6 +79,9 @@ router.get(
             ,U.email
             ,U.name
             ,U.cfHandle
+            ,U.rank
+            ,U.avatar
+            ,U.titlePhoto
             ,U.createdAt
             ,U.updatedAt
             ,R.name AS role

@@ -1,5 +1,5 @@
 import express from "express";
-import { Team, User } from "../models/index.js";
+import { Team, User, Invitation } from "../models/index.js";
 import verifyToken from "../middleware/auth.js";
 import { sequelize } from "../database.js";
 import errorHandler from "../middleware/errorHandler.js";
@@ -137,6 +137,39 @@ router.get(
         type: sequelize.QueryTypes.SELECT,
       })) || [];
     res.status(200).json({ invitations });
+  })
+);
+
+router.post(
+  "/:teamId/invitations",
+  verifyToken,
+  verifyTeamMembership,
+  tryCatch(async (req, res) => {
+    const { inviteeUsername, role } = req.body;
+
+    if (!inviteeUsername || !role) {
+      throw new AppError(400, "Please enter all the required fields");
+    }
+
+    const user = await User.findOne({ where: { username: inviteeUsername } });
+
+    if (!user) {
+      throw new AppError(404, "Invited user does not exist");
+    }
+
+    const inviteeId = user.id;
+
+    const inviterId = req.user.user_id;
+    const { teamId } = req.params;
+
+    const invitation = await Invitation.create({
+      inviterId: inviterId,
+      teamId: teamId,
+      inviteeId: inviteeId,
+      role: role,
+    });
+
+    res.status(201).json({ invitation });
   })
 );
 

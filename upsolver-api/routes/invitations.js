@@ -14,7 +14,10 @@ router.get(
     const getInvitations = `
         SELECT
             I.id AS id
-            ,U.username AS inviter
+            ,U.username AS inviterUsername
+            ,U.name AS inviterName
+            ,U.rank AS inviterRank
+            ,U.avatar AS inviterAvatar
             ,T.name AS team
             ,I.role AS role
             ,I.createdAt AS createdAt
@@ -31,7 +34,7 @@ router.get(
     `;
     const invitations = await sequelize.query(getInvitations, {
       type: sequelize.QueryTypes.SELECT,
-    });
+    }) || [];
     res.status(200).json({ invitations });
   })
 );

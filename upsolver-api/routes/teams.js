@@ -102,6 +102,44 @@ router.get(
   })
 );
 
+router.get(
+  "/:teamId/invitations",
+  verifyToken,
+  verifyTeamMembership,
+  tryCatch(async (req, res) => {
+    const { teamId } = req.params;
+    const getTeamInvitations = `
+        SELECT
+            I.id AS id
+            ,U1.name AS inviterName
+            ,U1.username AS inviterUsername
+            ,U1.rank AS inviterRank
+            ,U1.avatar AS inviterAvatar
+            ,U2.name AS inviteeName
+            ,U2.username AS inviteeUsername
+            ,U2.rank AS inviteeRank
+            ,U2.avatar AS inviteeAvatar
+            ,I.role AS role
+            ,I.createdAt AS createdAt
+        FROM
+            
+            invitations I
+            INNER JOIN users U1
+                ON I.inviterId = U1.id
+            INNER JOIN users U2
+                ON I.inviteeId = U2.id
+        WHERE
+            I.teamId = ${teamId}
+        ORDER BY
+            I.createdAt DESC;`;
+    const invitations =
+      (await sequelize.query(getTeamInvitations, {
+        type: sequelize.QueryTypes.SELECT,
+      })) || [];
+    res.status(200).json({ invitations });
+  })
+);
+
 router.use(errorHandler);
 
 export default router;

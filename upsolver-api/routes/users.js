@@ -12,6 +12,7 @@ import {
 import errorHandler from "../middleware/errorHandler.js";
 import tryCatch from "../utils/tryCatch.js";
 import AppError from "../utils/AppError.js";
+import { sequelize } from "../database.js";
 
 dotenv.config();
 
@@ -39,6 +40,14 @@ router.post(
       throw new AppError(409, "Email already used with another account");
     }
 
+    const response = await fetch(
+      `https://codeforces.com/api/user.info?handles=${cfHandle}`
+    );
+    const data = await response.json();
+    if (data.status !== "OK") {
+      throw new AppError(400, "Invalid Codeforces handle");
+    }
+
     const encryptedPassword = await bcrypt.hash(password, ROUNDS_OF_HASHING);
     const user = await User.create({
       username: username.toLowerCase(),
@@ -46,6 +55,9 @@ router.post(
       password: encryptedPassword,
       name,
       cfHandle: cfHandle.toLowerCase(),
+      rank: data.result[0].rank || "unrated",
+      avatar: data.result[0].avatar,
+      titlePhoto: data.result[0].titlePhoto,
     });
 
     const token = jwt.sign(

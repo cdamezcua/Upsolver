@@ -1,58 +1,70 @@
 [
-    {
-        "id": 1,
-        "username": "cdamezcua",
-        "email": "cdamezcua@outlook.com",
-        "password": "1234",
-        "name": "Carlos David Amezcua Canales",
-        "cfHandle": "cdamezcua"
-    },
-    {
-        "id": 2,
-        "username": "germanking6",
-        "email": "germanking6@outlook.com",
-        "password": "1234",
-        "name": "Germán Andrés Jaramillo Ramirez",
-        "cfHandle": "germanking6"
-    },
-    {
-        "id": 3,
-        "username": "karlamun",
-        "email": "karlamun@outlook.com",
-        "password": "1234",
-        "name": "Karla",
-        "cfHandle": "karlamun"
-    },
-    {
-        "id": 4,
-        "username": "IvanBorquez",
-        "email": "IvanBorquez@outlook.com",
-        "password": "1234",
-        "name": "Jorge Iván Bórquez Meza",
-        "cfHandle": "IvanBorquez"
-    },
-    {
-        "id": 5,
-        "username": "Franco1010",
-        "email": "Franco1010@outlook.com",
-        "password": "1234",
-        "name": "Franco Ramirez",
-        "cfHandle": "Franco1010"
-    },
-    {
-        "id": 6,
-        "username": "crystaalroo",
-        "email": "crystaalroo@outlook.com",
-        "password": "1234",
-        "name": "Aida Crystal Rodriguez Zoto",
-        "cfHandle": "crystaalroo"
-    },
-    {
-        "id": 7,
-        "username": "netodios",
-        "email": "netodios@outlook.com",
-        "password": "1234",
-        "name": "Neto",
-        "cfHandle": "netodios"
-    }
+  {
+    "id": 1,
+    "username": "cdamezcua",
+    "email": "cdamezcua@outlook.com",
+    "password": "1234",
+    "name": "Carlos David Amezcua Canales",
+    "cfHandle": "cdamezcua",
+    "rank": "expert",
+    "avatar": "https://userpic.codeforces.org/1503444/avatar/2e65b644b88cb12a.jpg",
+    "titlePhoto": "https://userpic.codeforces.org/1503444/title/faa3a9eec7155fe3.jpg"
+  },
+  {
+    "id": 2,
+    "username": "germanking6",
+    "email": "germanking6@outlook.com",
+    "password": "1234",
+    "name": "Germán Andrés Jaramillo Ramirez",
+    "cfHandle": "germanking6",
+    "rank": "pupil",
+    "avatar": "https://userpic.codeforces.org/2552944/avatar/f0ca191cceedf24.jpg",
+    "titlePhoto": "https://userpic.codeforces.org/2552944/title/8d5375a95b5ba387.jpg"
+  },
+  {
+    "id": 3,
+    "username": "karlamun",
+    "email": "karlamun@outlook.com",
+    "password": "1234",
+    "name": "Karla",
+    "cfHandle": "karlamun",
+    "rank": "unrated",
+    "avatar": "https://userpic.codeforces.org/no-avatar.jpg",
+    "titlePhoto": "https://userpic.codeforces.org/no-title.jpg"
+  },
+  {
+    "id": 4,
+    "username": "IvanBorquez",
+    "email": "IvanBorquez@outlook.com",
+    "password": "1234",
+    "name": "Jorge Iván Bórquez Meza",
+    "cfHandle": "IvanBorquez",
+    "rank": "master",
+    "avatar": "https://userpic.codeforces.org/921535/avatar/2761fa609ed5b15b.jpg",
+    "titlePhoto": "https://userpic.codeforces.org/921535/title/2fa421e4d0eac72e.jpg"
+  },
+  {
+    "id": 5,
+    "username": "Franco1010",
+    "email": "Franco1010@outlook.com",
+    "password": "1234",
+    "name": "Franco Ramirez",
+    "cfHandle": "Franco1010"
+  },
+  {
+    "id": 6,
+    "username": "crystaalroo",
+    "email": "crystaalroo@outlook.com",
+    "password": "1234",
+    "name": "Aida Crystal Rodriguez Soto",
+    "cfHandle": "crystaalroo"
+  },
+  {
+    "id": 7,
+    "username": "netodios",
+    "email": "netodios@outlook.com",
+    "password": "1234",
+    "name": "Neto",
+    "cfHandle": "netodios"
+  }
 ]

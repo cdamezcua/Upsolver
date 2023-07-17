@@ -1,7 +1,7 @@
 import React from "react";
 import "./GroupsScreen.css";
 import Navbar from "../Navbar/Navbar";
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Button, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
 import {
@@ -96,6 +96,11 @@ export default function GroupsScreen() {
         <Button variant="contained" color="primary" className="page-button">
           <Link className="button-link" to={`/team/${teamId}/members`}>
             Members
+          </Link>
+        </Button>
+        <Button variant="contained" color="primary" className="page-button">
+          <Link className="button-link" to={`/team/${teamId}/invitations`}>
+            Invitations
           </Link>
         </Button>
       </Stack>

@@ -5,7 +5,6 @@ import TeamCard from "../TeamCard/TeamCard";
 import { UserContext } from "../../UserContext.js";
 
 export default function TeamGrid() {
-
   const { user } = useContext(UserContext);
 
   const [teams, setTeams] = React.useState([]);

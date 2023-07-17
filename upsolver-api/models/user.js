@@ -29,6 +29,18 @@ export const User = sequelize.define("user", {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
+  rank: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
+  avatar: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
+  titlePhoto: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
   token: {
     type: DataTypes.STRING(255),
     allowNull: true,

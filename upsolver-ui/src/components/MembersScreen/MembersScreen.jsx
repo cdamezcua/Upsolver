@@ -16,6 +16,7 @@ import {
 import { UserContext } from "../../UserContext.js";
 import { useEffect, useContext } from "react";
 import Subtitle from "../Subtitle/Subtitle";
+import { RANKING_COLORS } from "../../constants/config.js";
 
 export default function MembersScreen() {
   const { user } = useContext(UserContext);
@@ -75,39 +76,84 @@ export default function MembersScreen() {
           ? team.name + " - " + team.university
           : ""}
       </Subtitle>
-      <Stack spacing={2} direction="row" sx={{ m: "20px" }}>
-        <Button variant="contained" color="primary" className="page-button">
-          <Link className="button-link" to={`/team/${teamId}/groups`}>
-            Groups
-          </Link>
-        </Button>
-        <Button variant="contained" color="primary" className="page-button">
-          <Link className="button-link" to={`/team/${teamId}/members`}>
-            Members
-          </Link>
-        </Button>
+      <Stack
+        spacing={2}
+        direction="row"
+        sx={{ m: "20px" }}
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <Stack direction="row" spacing={2}>
+          <Button variant="contained" color="primary" className="page-button">
+            <Link className="button-link" to={`/team/${teamId}/groups`}>
+              Groups
+            </Link>
+          </Button>
+          <Button variant="contained" color="primary" className="page-button">
+            <Link className="button-link" to={`/team/${teamId}/members`}>
+              Members
+            </Link>
+          </Button>
+          <Button variant="contained" color="primary" className="page-button">
+            <Link className="button-link" to={`/team/${teamId}/invitations`}>
+              Invitations
+            </Link>
+          </Button>
+        </Stack>
       </Stack>
       <Box sx={{ m: "20px" }}>
         <TableContainer component={Paper}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              m: "20px",
+            }}
+          >
+            <Typography variant="h6">Team Members</Typography>
+          </Box>
+          <Divider />
           <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Member</TableCell>
+                <TableCell>Role</TableCell>
+                <TableCell>Member Since</TableCell>
+              </TableRow>
+            </TableHead>
             <TableBody>
               {members.map((user) => (
                 <TableRow key={user.id}>
                   <TableCell>
-                    <Avatar variant="square" sx={{ width: 100, height: 100 }}>
-                      {user.name[0]}
-                    </Avatar>
+                    <Stack direction="row" spacing="16px" alignItems="center">
+                      <Avatar
+                        alt={user.name[0]}
+                        src={user.avatar}
+                        variant="square"
+                        sx={{ width: 50, height: 50 }}
+                      />
+                      <Box sx={{ display: "flex", flexDirection: "column" }}>
+                        <Typography variant="body1" noWrap>
+                          {user.name}
+                        </Typography>
+                        <Typography
+                          noWrap
+                          variant="subtitle2"
+                          color={RANKING_COLORS[user.rank]}
+                        >
+                          {user.username}
+                        </Typography>
+                      </Box>
+                    </Stack>
                   </TableCell>
                   <TableCell>
-                    <Box sx={{ display: "flex", flexDirection: "column" }}>
-                      <Typography variant="h6">{user.name}</Typography>
-                      <Typography variant="subtitle1">
-                        {user.username}
-                      </Typography>
-                    </Box>
+                    <Typography variant="body1">{user.role}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="h6">{user.role}</Typography>
+                    <Typography variant="body1">
+                      {new Date(user.createdAt).toLocaleDateString()}
+                    </Typography>
                   </TableCell>
                 </TableRow>
               ))}

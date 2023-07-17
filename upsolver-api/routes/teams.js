@@ -1,10 +1,11 @@
 import express from "express";
-import { Team, User } from "../models/index.js";
+import { Team, User, Invitation } from "../models/index.js";
 import verifyToken from "../middleware/auth.js";
 import { sequelize } from "../database.js";
 import errorHandler from "../middleware/errorHandler.js";
 import tryCatch from "../utils/tryCatch.js";
 import verifyTeamMembership from "../middleware/verifyTeamMembership.js";
+import AppError from "../utils/AppError.js";
 
 const router = express.Router();
 
@@ -79,6 +80,9 @@ router.get(
             ,U.email
             ,U.name
             ,U.cfHandle
+            ,U.rank
+            ,U.avatar
+            ,U.titlePhoto
             ,U.createdAt
             ,U.updatedAt
             ,R.name AS role
@@ -96,6 +100,102 @@ router.get(
       mapToModel: true,
     });
     res.status(200).json(users);
+  })
+);
+
+router.get(
+  "/:teamId/invitations",
+  verifyToken,
+  verifyTeamMembership,
+  tryCatch(async (req, res) => {
+    const { teamId } = req.params;
+    const getTeamInvitations = `
+        SELECT
+            I.id AS id
+            ,U1.name AS inviterName
+            ,U1.username AS inviterUsername
+            ,U1.rank AS inviterRank
+            ,U1.avatar AS inviterAvatar
+            ,U2.name AS inviteeName
+            ,U2.username AS inviteeUsername
+            ,U2.rank AS inviteeRank
+            ,U2.avatar AS inviteeAvatar
+            ,I.role AS role
+            ,I.createdAt AS createdAt
+        FROM
+            
+            invitations I
+            INNER JOIN users U1
+                ON I.inviterId = U1.id
+            INNER JOIN users U2
+                ON I.inviteeId = U2.id
+        WHERE
+            I.teamId = ${teamId}
+        ORDER BY
+            I.createdAt DESC;`;
+    const invitations =
+      (await sequelize.query(getTeamInvitations, {
+        type: sequelize.QueryTypes.SELECT,
+      })) || [];
+    res.status(200).json({ invitations });
+  })
+);
+
+router.post(
+  "/:teamId/invitations",
+  verifyToken,
+  verifyTeamMembership,
+  tryCatch(async (req, res) => {
+    const { inviteeUsername, role } = req.body;
+
+    if (!inviteeUsername || !role) {
+      throw new AppError(400, "Please enter all the required fields");
+    }
+
+    const user = await User.findOne({ where: { username: inviteeUsername } });
+
+    if (!user) {
+      throw new AppError(404, "Invited user does not exist");
+    }
+
+    const inviteeId = user.id;
+
+    const inviterId = req.user.user_id;
+    const { teamId } = req.params;
+
+    const invitation = await Invitation.create({
+      inviterId: inviterId,
+      teamId: teamId,
+      inviteeId: inviteeId,
+      role: role,
+    });
+
+    res.status(201).json({ invitation });
+  })
+);
+
+router.delete(
+  "/:teamId/invitations/:invitationId",
+  verifyToken,
+  verifyTeamMembership,
+  tryCatch(async (req, res) => {
+    const { invitationId } = req.params;
+    const invitation = await Invitation.findOne({
+      where: { id: invitationId, teamId: req.params.teamId },
+    });
+    if (!invitation) {
+      throw new AppError(404, "Invitation not found");
+    }
+    const deletedInvitation = `
+        DELETE FROM
+            invitations
+        WHERE
+            id = ${invitationId};
+    `;
+    await sequelize.query(deletedInvitation, {
+      type: sequelize.QueryTypes.DELETE,
+    });
+    res.status(204).json({ message: "Invitation deleted successfully" });
   })
 );
 

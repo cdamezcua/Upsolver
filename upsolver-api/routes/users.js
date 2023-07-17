@@ -140,6 +140,27 @@ router.post(
   })
 );
 
+router.get(
+  "/",
+  tryCatch(async (req, res) => {
+    const getUsers = `
+        SELECT
+            id
+            ,username AS "label"
+        FROM
+            users
+        ORDER BY
+            username ASC;
+    `;
+    const users = await User.sequelize.query(getUsers, {
+      type: sequelize.QueryTypes.SELECT,
+      model: User,
+      mapToModel: true,
+    });
+    res.status(200).json({ users });
+  })
+);
+
 router.use(errorHandler);
 
 export default router;

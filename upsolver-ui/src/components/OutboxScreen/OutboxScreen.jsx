@@ -21,7 +21,26 @@ import {
   TableRow,
   Paper,
   Fab,
+  Select,
+  TextField,
+  Modal,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Autocomplete,
 } from "@mui/material";
+
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 export default function OutboxScreen() {
   const { user } = useContext(UserContext);
@@ -96,6 +115,62 @@ export default function OutboxScreen() {
     }
   }
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => setOpen(true);
+
+  const handleClose = () => {
+    setOpen(false);
+    setInvitee(null);
+  };
+
+  const [users, setUsers] = React.useState([]);
+
+  async function fetchUsers() {
+    try {
+      const response = await fetch("http://localhost:3001/users", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": user?.token,
+        },
+      });
+      const data = await response.json();
+      setUsers(data.users ?? []);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const [invitee, setInvitee] = React.useState(null);
+
+  const [role, setRole] = React.useState("contestant");
+
+  async function handleSendInvitation() {
+    try {
+      const response = await fetch(
+        "http://localhost:3001/teams/" + teamId + "/invitations",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user?.token,
+          },
+          body: JSON.stringify({
+            inviteeUsername: invitee.label,
+            role: role,
+          }),
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      fetchInvitations();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <Navbar />
@@ -146,7 +221,10 @@ export default function OutboxScreen() {
                 size="medium"
                 color="primary"
                 aria-label="add"
-                onClick={() => {}}
+                onClick={() => {
+                  fetchUsers();
+                  handleOpen();
+                }}
               >
                 <AddIcon sx={{ mr: 1 }} />
                 Invite User
@@ -238,6 +316,53 @@ export default function OutboxScreen() {
           </Table>
         </TableContainer>
       </Box>
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={modalStyle}>
+          <Paper sx={{ p: 2 }}>
+            <Typography variant="h6">Invite User</Typography>
+            <Divider sx={{ my: 2 }} />
+            <Autocomplete
+              fullWidth
+              disablePortal
+              id="combo-box-demo"
+              options={users}
+              sx={{ mb: 2 }}
+              renderInput={(params) => (
+                <TextField {...params} label="username" />
+              )}
+              defaultValue={""}
+              value={invitee}
+              onChange={(e, newValue) => setInvitee(newValue)}
+            />
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Role</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Role"
+                defaultValue={"contestant"}
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <MenuItem value={"contestant"}>contestant</MenuItem>
+                <MenuItem value={"coach"}>coach</MenuItem>
+              </Select>
+            </FormControl>
+            <Divider sx={{ my: 2 }} />
+            <Stack direction="row" spacing={2} sx={{ justifyContent: "end" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  handleSendInvitation();
+                }}
+              >
+                Send Invitation
+              </Button>
+            </Stack>
+          </Paper>
+        </Box>
+      </Modal>
     </>
   );
 }

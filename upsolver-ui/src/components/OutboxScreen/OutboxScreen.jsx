@@ -75,6 +75,27 @@ export default function OutboxScreen() {
     fetchInvitations();
   }, [user, teamId]);
 
+  async function cancelInvitation(invitationId) {
+    try {
+      await fetch(
+        "http://localhost:3001/teams/" +
+          teamId +
+          "/invitations/" +
+          invitationId,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user?.token,
+          },
+        }
+      );
+      fetchInvitations();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <Navbar />
@@ -203,7 +224,9 @@ export default function OutboxScreen() {
                       <Button
                         variant="contained"
                         color="error"
-                        onClick={() => {}}
+                        onClick={() => {
+                          cancelInvitation(invitation.id);
+                        }}
                       >
                         Cancel Invitation
                       </Button>

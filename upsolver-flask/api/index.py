@@ -9,12 +9,12 @@ URL_PREFIX = "https://codeforces.com"
 
 
 class Group:
-    def __init__(self, url):
-        self.url = url
+    def __init__(self, group_constructor):
+        self.url = group_constructor["url"]
         response = requests.get(self.url)
         soup = BeautifulSoup(response.text, "html.parser")
         self.name = soup.select_one("#sidebar th a").string.strip()
-        self.contests = []
+        self.contest_constructors = []
         contest_table = soup.find("div", class_="contests-table")
         if contest_table:
             table_rows = contest_table.find_all("tr")
@@ -30,22 +30,27 @@ class Group:
                     contest_start_time = contest_start_time.string.strip()
                 else:
                     contest_start_time = "-"
-                self.contests.append(Contest(contest_url, contest_start_time))
+                self.contest_constructors.append(
+                    {"url": contest_url, "start_time": contest_start_time}
+                )
         self.json = {
             "url": self.url,
             "name": self.name,
-            "contests": [contest.json for contest in self.contests],
+            "contest_constructors": self.contest_constructors,
         }
 
 
 class Contest:
-    def __init__(self, url, start_time="-"):
-        self.url = url
-        self.start_time = start_time
+    def __init__(self, contest_constructor):
+        self.url = contest_constructor["url"]
+        try:
+            self.start_time = contest_constructor["start_time"]
+        except KeyError:
+            self.start_time = "-"
         self.div = "All"
         self.number = 0
         self.problems = []
-        response = requests.get(url)
+        response = requests.get(self.url)
         soup = BeautifulSoup(response.text, "html.parser")
         self.name = soup.find("li", class_="active").find("a").string.strip()
         if match := re.search(r"\[.*?\]", self.name):
@@ -108,10 +113,11 @@ def home():
     return "Hello, World!"
 
 
-@app.route("/groups", methods=["GET"])
+@app.route("/groups", methods=["POST"])
 def groups():
-    url = request.args.get("url")
-    group = Group(url)
+    data = request.get_json()
+    group_constructor = data["group_constructor"]
+    group = Group(group_constructor)
     return jsonify(
         {
             "group": group.json,
@@ -119,10 +125,11 @@ def groups():
     )
 
 
-@app.route("/contests", methods=["GET"])
+@app.route("/contests", methods=["POST"])
 def contests():
-    url = request.args.get("url")
-    contest = Contest(url)
+    data = request.get_json()
+    contest_constructor = data["contest_constructor"]
+    contest = Contest(contest_constructor)
     return jsonify(
         {
             "contest": contest.json,

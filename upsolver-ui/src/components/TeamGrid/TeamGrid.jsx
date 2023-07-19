@@ -1,33 +1,9 @@
-import React, { useEffect, useContext } from "react";
+import React from "react";
 import "./TeamGrid.css";
 import { Grid, Box } from "@mui/material";
 import TeamCard from "../TeamCard/TeamCard";
-import { UserContext } from "../../UserContext.js";
 
-export default function TeamGrid() {
-  const { user } = useContext(UserContext);
-
-  const [teams, setTeams] = React.useState([]);
-
-  useEffect(() => {
-    async function fetchTeams() {
-      try {
-        const response = await fetch("http://localhost:3001/teams", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token": user?.token,
-          },
-        });
-        const data = await response.json();
-        setTeams(data.teams ?? []);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchTeams();
-  }, [user]);
-
+export default function TeamGrid({ teams }) {
   return (
     <Box sx={{ padding: 2 }}>
       <Grid container spacing={2}>

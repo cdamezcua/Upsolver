@@ -1,7 +1,15 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { User, Team, Role, Group, Invitation } from "./models/index.js";
+import {
+  User,
+  Team,
+  Role,
+  Group,
+  Invitation,
+  Contest,
+  Problem,
+} from "./models/index.js";
 import { sequelize } from "./database.js";
 import bcrypt from "bcrypt";
 import { ROUNDS_OF_HASHING } from "./constants/config.js";
@@ -27,6 +35,14 @@ const invitationData = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "./seeders/invitations.json"), "utf8")
 );
 
+const contestData = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "./seeders/contests.json"), "utf8")
+);
+
+const problemData = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "./seeders/problems.json"), "utf8")
+);
+
 userData.forEach(async (user) => {
   user.password = await bcrypt.hash(user.password, ROUNDS_OF_HASHING);
 });
@@ -40,6 +56,8 @@ const seedDatabase = async () => {
       sequelize.query("DROP TABLE IF EXISTS roles"),
       sequelize.query("DROP TABLE IF EXISTS groups"),
       sequelize.query("DROP TABLE IF EXISTS invitations"),
+      sequelize.query("DROP TABLE IF EXISTS contests"),
+      sequelize.query("DROP TABLE IF EXISTS problems"),
     ]);
 
     await sequelize.sync({ alter: true });
@@ -50,6 +68,8 @@ const seedDatabase = async () => {
       Role.bulkCreate(roleData),
       Group.bulkCreate(groupData),
       Invitation.bulkCreate(invitationData),
+      Contest.bulkCreate(contestData),
+      Problem.bulkCreate(problemData),
     ]);
   } catch (error) {
     console.error("Error seeding data:", error);

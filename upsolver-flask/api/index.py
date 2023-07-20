@@ -60,12 +60,14 @@ class Contest:
             self.start_time = contest_constructor["start_time"]
         except KeyError:
             self.start_time = "-"
+        self.name = ""
         self.division = "All"
         self.number = 0
         self.problems = []
         response = http.get(self.url)
         soup = BeautifulSoup(response.text, "html.parser")
-        self.name = soup.find("li", class_="active").find("a").string.strip()
+        if name_anchor := soup.find("a", href=self.url[len(URL_PREFIX) :]):
+            self.name = name_anchor.string.strip()
         if match := re.search(r"\[.*?\]", self.name):
             self.division = match.group(0)[1:-1]
         if match := re.search(r"#\d+", self.name):

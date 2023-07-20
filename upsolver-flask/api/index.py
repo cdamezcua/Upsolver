@@ -10,6 +10,17 @@ import re
 URL_PREFIX = "https://codeforces.com"
 
 
+retry_strategy = Retry(
+    total=4,
+    status_forcelist=[429, 500, 502, 503, 504],
+    backoff_factor=1,
+)
+
+http = requests.Session()
+
+http.mount("https://", HTTPAdapter(max_retries=retry_strategy))
+
+
 class Group:
     def __init__(self, group_constructor):
         self.url = group_constructor["url"]

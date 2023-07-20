@@ -24,7 +24,7 @@ http.mount("https://", HTTPAdapter(max_retries=retry_strategy))
 class Group:
     def __init__(self, group_constructor):
         self.url = group_constructor["url"]
-        response = requests.get(self.url)
+        response = http.get(self.url)
         soup = BeautifulSoup(response.text, "html.parser")
         self.name = soup.select_one("#sidebar th a").string.strip()
         self.contest_constructors = []
@@ -63,7 +63,7 @@ class Contest:
         self.div = "All"
         self.number = 0
         self.problems = []
-        response = requests.get(self.url)
+        response = http.get(self.url)
         soup = BeautifulSoup(response.text, "html.parser")
         self.name = soup.find("li", class_="active").find("a").string.strip()
         if match := re.search(r"\[.*?\]", self.name):

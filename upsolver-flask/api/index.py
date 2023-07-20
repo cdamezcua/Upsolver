@@ -10,11 +10,7 @@ import re
 URL_PREFIX = "https://codeforces.com"
 
 
-retry_strategy = Retry(
-    total=4,
-    status_forcelist=[429, 500, 502, 503, 504],
-    backoff_factor=1,
-)
+retry_strategy = Retry(total=4, status_forcelist=[429, 500, 502, 503, 504])
 
 http = requests.Session()
 

@@ -24,15 +24,14 @@ router.get(
             ,G.updatedAt
         FROM
             groups G
-            INNER JOIN teams T
-                ON G.teamId = T.id
         WHERE
-            T.id = ${teamId};`;
-    const groups = await sequelize.query(getGroups, {
-      type: sequelize.QueryTypes.SELECT,
-      model: Group,
-      mapToModel: true,
-    }) || [];
+            G.teamId = ${teamId};`;
+    const groups =
+      (await sequelize.query(getGroups, {
+        type: sequelize.QueryTypes.SELECT,
+        model: Group,
+        mapToModel: true,
+      })) || [];
     res.status(200).json({ groups });
   })
 );

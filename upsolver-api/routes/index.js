@@ -3,6 +3,7 @@ import usersRoutes from "./users.js";
 import teamsRoutes from "./teams.js";
 import groupsRoutes from "./groups.js";
 import invitationsRoutes from "./invitations.js";
+import contestsRoutes from "./contests.js";
 
 const router = express.Router();
 

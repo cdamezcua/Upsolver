@@ -1,0 +1,35 @@
+# Endpoints
+
+## Users
+
+POST    /users/register
+POST    /users/login
+GET     /users/is-logged-in
+POST    /users/logout
+GET     /users
+
+## Invitations
+
+GET     /invitations
+POST    /invitations/:invitationId/accept
+POST    /invitations/:invitationId/reject
+
+## Teams
+
+GET     /teams
+POST    /teams
+GET     /teams/:teamId
+GET     /teams/:teamId/users
+GET     /teams/:teamId/invitations
+POST    /teams/:teamId/invitations
+DELETE  /teams/:teamId/invitations/:invitationId
+
+## Groups
+
+GET     /teams/:teamId/groups
+POST    /teams/:teamId/groups
+
+## Contests
+
+POST    /teams/:teamId/groups/:groupId/contests
+

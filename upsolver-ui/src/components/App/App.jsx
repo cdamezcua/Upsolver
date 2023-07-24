@@ -12,6 +12,7 @@ import GroupsScreen from "../GroupsScreen/GroupsScreen";
 import MembersScreen from "../MembersScreen/MembersScreen";
 import InboxScreen from "../InboxScreen/InboxScreen";
 import OutboxScreen from "../OutboxScreen/OutboxScreen";
+import ProblemsTableScreen from "../ProblemsTableScreen/ProblemsTableScreen";
 
 export default function App() {
   const [user, setUser] = useState(() => {
@@ -94,6 +95,10 @@ export default function App() {
             <Route
               path="/team/:teamId/groups"
               element={<ProtectedRoute element={<GroupsScreen />} />}
+            />
+            <Route
+              path="/team/:teamId/group/:groupId"
+              element={<ProtectedRoute element={<ProblemsTableScreen />} />}
             />
             <Route
               path="/team/:teamId/members"

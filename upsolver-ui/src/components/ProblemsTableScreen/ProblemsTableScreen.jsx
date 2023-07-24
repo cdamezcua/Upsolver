@@ -15,6 +15,9 @@ import {
   Fab,
   Button,
   Stack,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { UserContext } from "../../UserContext.js";
 import { useEffect, useContext } from "react";
@@ -74,6 +77,60 @@ export default function ProblemsTableScreen() {
       }
     }
     fetchContestsProblems();
+  }, [user, teamId, groupsId]);
+
+  const [contestants, setContestants] = React.useState([]);
+
+  useEffect(() => {
+    async function fetchContestants() {
+      try {
+        const response = await fetch(
+          "http://localhost:3001/teams/" +
+            teamId +
+            "/members?membership=contestant",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "x-access-token": user?.token,
+            },
+          }
+        );
+        const data = await response.json();
+        setContestants(data.members ?? []);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchContestants();
+  }, [user, teamId]);
+
+  const [submissions, setSubmissions] = React.useState([]);
+
+  useEffect(() => {
+    async function fetchSubmissions() {
+      try {
+        const response = await fetch(
+          "http://localhost:3001/teams/" +
+            teamId +
+            "/groups/" +
+            groupsId +
+            "/submissions?membership=contestant",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "x-access-token": user?.token,
+            },
+          }
+        );
+        const data = await response.json();
+        setSubmissions(data.submissions ?? []);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchSubmissions();
   }, [user, teamId, groupsId]);
 
   return (
@@ -142,6 +199,14 @@ export default function ProblemsTableScreen() {
                 <TableCell>Contest Name</TableCell>
                 <TableCell>Problem Number</TableCell>
                 <TableCell>Problem Name</TableCell>
+                {contestants.map((contestant) => (
+                  <TableCell
+                    key={contestant.id}
+                    sx={{ width: "100px", textAlign: "center" }}
+                  >
+                    {contestant.username}
+                  </TableCell>
+                ))}
                 <TableCell>Problem Solved Count</TableCell>
               </TableRow>
             </TableHead>
@@ -166,6 +231,90 @@ export default function ProblemsTableScreen() {
                       {contestProblem.problemName}
                     </Link>
                   </TableCell>
+                  {contestants.map((contestant) => (
+                    <TableCell key={contestProblem.problemId + contestant.id}>
+                      {submissions
+                        .filter(
+                          (submission) =>
+                            submission.problemId === contestProblem.problemId &&
+                            submission.userId === contestant.id
+                        )
+                        .map((submission) => (
+                          <FormControl
+                            fullWidth
+                            key={submission.userId + "-" + submission.problemId}
+                            size="small"
+                          >
+                            <Select
+                              sx={{
+                                textAlign: "center",
+                                backgroundColor:
+                                  submission.veredict === "AC"
+                                    ? "#4caf50"
+                                    : submission.veredict === "WA"
+                                    ? "#f44336"
+                                    : submission.veredict === "TLE"
+                                    ? "#ff9800"
+                                    : "inherit",
+                              }}
+                              defaultValue={""}
+                              value={submission.veredict ?? ""}
+                              onChange={(event) => {
+                                setSubmissions(
+                                  submissions.map((submission) => {
+                                    if (
+                                      submission.problemId ===
+                                        contestProblem.problemId &&
+                                      submission.userId === contestant.id
+                                    ) {
+                                      submission.veredict = event.target.value;
+                                    }
+                                    return submission;
+                                  })
+                                );
+                                async function updateVeredict() {
+                                  try {
+                                    const response = await fetch(
+                                      "http://localhost:3001/teams/" +
+                                        teamId +
+                                        "/groups/" +
+                                        groupsId +
+                                        "/submissions/" +
+                                        "?userId=" +
+                                        contestant.id +
+                                        "&problemId=" +
+                                        contestProblem.problemId,
+                                      {
+                                        method: "PATCH",
+                                        headers: {
+                                          "Content-Type": "application/json",
+                                          "x-access-token": user?.token,
+                                        },
+                                        body: JSON.stringify({
+                                          veredict: event.target.value,
+                                        }),
+                                      }
+                                    );
+                                    const data = await response.json();
+                                    console.log(data);
+                                  } catch (error) {
+                                    console.log(error);
+                                  }
+                                }
+                                updateVeredict();
+                              }}
+                            >
+                              <MenuItem value={""}>
+                                <em>None</em>
+                              </MenuItem>
+                              <MenuItem value={"AC"}>AC</MenuItem>
+                              <MenuItem value={"WA"}>WA</MenuItem>
+                              <MenuItem value={"TLE"}>TLE</MenuItem>
+                            </Select>
+                          </FormControl>
+                        ))}
+                    </TableCell>
+                  ))}
                   <TableCell>{contestProblem.problemSolvedCount}</TableCell>
                 </TableRow>
               ))}

@@ -83,7 +83,37 @@ export default function GroupsScreen() {
 
   useEffect(() => {
     fetchGroupsOfTeam();
-  }, [user]);
+  }, [user, teamId]);
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const [url, setUrl] = React.useState("");
+
+  const handleCreateGroup = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3001/teams/" + teamId + "/groups",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user?.token,
+          },
+          body: JSON.stringify({
+            group_constructor: {
+              url: url,
+            },
+          }),
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>

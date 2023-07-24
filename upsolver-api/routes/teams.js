@@ -100,11 +100,12 @@ router.get(
 );
 
 router.get(
-  "/:teamId/users",
+  "/:teamId/members",
   verifyToken,
   verifyTeamMembership,
   tryCatch(async (req, res) => {
     const { teamId } = req.params;
+    const { membership } = req.query;
     const getUsers = `
         SELECT
             U.id
@@ -124,14 +125,16 @@ router.get(
                 ON U.id = R.userId
         WHERE
             R.teamId = ${teamId}
+            AND (R.name = '${membership}'
+                OR '${membership}' = 'undefined')
         ORDER BY
             U.createdAt DESC;`;
-    const users = await sequelize.query(getUsers, {
+    const members = await sequelize.query(getUsers, {
       type: sequelize.QueryTypes.SELECT,
       model: User,
       mapToModel: true,
     });
-    res.status(200).json(users);
+    res.status(200).json({ members });
   })
 );
 

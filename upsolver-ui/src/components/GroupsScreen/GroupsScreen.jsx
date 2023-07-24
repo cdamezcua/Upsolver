@@ -175,6 +175,39 @@ export default function GroupsScreen() {
           </Table>
         </TableContainer>
       </Box>
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={modalStyle}>
+          <form
+            onSubmit={async (event) => {
+              event.preventDefault();
+              await handleCreateGroup();
+              console.log("Group created");
+              fetchGroupsOfTeam();
+            }}
+          >
+            <Paper sx={{ p: 2 }}>
+              <Typography variant="h6">Create Group</Typography>
+              <Divider sx={{ my: 2 }} />
+              <Stack direction="row" spacing={2}>
+                <TextField
+                  label="URL"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  value={url}
+                  onChange={(event) => setUrl(event.target.value)}
+                />
+              </Stack>
+              <Divider sx={{ my: 2 }} />
+              <Stack direction="row" spacing={2} sx={{ justifyContent: "end" }}>
+                <Button variant="contained" color="primary" type="submit">
+                  Create
+                </Button>
+              </Stack>
+            </Paper>
+          </form>
+        </Box>
+      </Modal>
     </>
   );
 }

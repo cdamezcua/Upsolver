@@ -41,6 +41,38 @@ router.get(
   })
 );
 
+router.post(
+  "/",
+  verifyToken,
+  tryCatch(async (req, res) => {
+    const { name, university, role } = req.body;
+
+    if (!name || !university || !role) {
+      throw new AppError(400, "Please enter all the required fields");
+    }
+
+    const team = await Team.create({
+      name: name,
+      university: university,
+    });
+
+    const userId = req.user.user_id;
+    const teamId = team.id;
+
+    const addMember = `
+        INSERT INTO roles
+            (userId, teamId, name)
+        VALUES
+            (${userId}, ${teamId}, '${role}');`;
+
+    await sequelize.query(addMember, {
+      type: sequelize.QueryTypes.INSERT,
+    });
+
+    res.status(201).json({ team });
+  })
+);
+
 router.get(
   "/:teamId",
   verifyToken,

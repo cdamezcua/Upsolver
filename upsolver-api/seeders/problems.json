@@ -1,0 +1,106 @@
+[
+  {
+    "id": 1,
+    "contestId": 1,
+    "name": "Adrien and Austin",
+    "number": "A",
+    "solved_count": 32,
+    "url": "https://codeforces.com/group/DVzG4G4yZx/contest/422835/problem/A"
+  },
+  {
+    "id": 2,
+    "contestId": 1,
+    "name": "Tournament",
+    "number": "B",
+    "solved_count": 0,
+    "url": "https://codeforces.com/group/DVzG4G4yZx/contest/422835/problem/B"
+  },
+  {
+    "id": 3,
+    "contestId": 1,
+    "name": "Cherry and Chocolate",
+    "number": "C",
+    "solved_count": 0,
+    "url": "https://codeforces.com/group/DVzG4G4yZx/contest/422835/problem/C"
+  },
+  {
+    "id": 4,
+    "contestId": 1,
+    "name": "Country Meow",
+    "number": "D",
+    "solved_count": 3,
+    "url": "https://codeforces.com/group/DVzG4G4yZx/contest/422835/problem/D"
+  },
+  {
+    "id": 5,
+    "contestId": 1,
+    "name": "Eva and Euro coins",
+    "number": "E",
+    "solved_count": 2,
+    "url": "https://codeforces.com/group/DVzG4G4yZx/contest/422835/problem/E"
+  },
+  {
+    "id": 6,
+    "contestId": 1,
+    "name": "Frank",
+    "number": "F",
+    "solved_count": 0,
+    "url": "https://codeforces.com/group/DVzG4G4yZx/contest/422835/problem/F"
+  },
+  {
+    "id": 7,
+    "contestId": 1,
+    "name": "Pyramid",
+    "number": "G",
+    "solved_count": 5,
+    "url": "https://codeforces.com/group/DVzG4G4yZx/contest/422835/problem/G"
+  },
+  {
+    "id": 8,
+    "contestId": 1,
+    "name": "Huge Discount",
+    "number": "H",
+    "solved_count": 0,
+    "url": "https://codeforces.com/group/DVzG4G4yZx/contest/422835/problem/H"
+  },
+  {
+    "id": 9,
+    "contestId": 1,
+    "name": "Magic Potion",
+    "number": "I",
+    "solved_count": 9,
+    "url": "https://codeforces.com/group/DVzG4G4yZx/contest/422835/problem/I"
+  },
+  {
+    "id": 10,
+    "contestId": 1,
+    "name": "Prime Game",
+    "number": "J",
+    "solved_count": 14,
+    "url": "https://codeforces.com/group/DVzG4G4yZx/contest/422835/problem/J"
+  },
+  {
+    "id": 11,
+    "contestId": 1,
+    "name": "Kangaroo Puzzle",
+    "number": "K",
+    "solved_count": 1,
+    "url": "https://codeforces.com/group/DVzG4G4yZx/contest/422835/problem/K"
+  },
+  {
+    "id": 12,
+    "contestId": 1,
+    "name": "Lagrange the Chef",
+    "number": "L",
+    "solved_count": 0,
+    "url": "https://codeforces.com/group/DVzG4G4yZx/contest/422835/problem/L"
+  },
+  {
+    "id": 13,
+    "contestId": 1,
+    "name": "Mediocre String Problem",
+    "number": "M",
+    "solved_count": 1,
+    "url": "https://codeforces.com/group/DVzG4G4yZx/contest/422835/problem/M"
+  }
+]

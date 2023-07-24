@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 from bs4 import BeautifulSoup
 import re
 
@@ -8,10 +10,17 @@ import re
 URL_PREFIX = "https://codeforces.com"
 
 
+retry_strategy = Retry(total=4, status_forcelist=[429, 500, 502, 503, 504])
+
+http = requests.Session()
+
+http.mount("https://", HTTPAdapter(max_retries=retry_strategy))
+
+
 class Group:
     def __init__(self, group_constructor):
         self.url = group_constructor["url"]
-        response = requests.get(self.url)
+        response = http.get(self.url)
         soup = BeautifulSoup(response.text, "html.parser")
         self.name = soup.select_one("#sidebar th a").string.strip()
         self.contest_constructors = []
@@ -47,14 +56,16 @@ class Contest:
             self.start_time = contest_constructor["start_time"]
         except KeyError:
             self.start_time = "-"
-        self.div = "All"
+        self.name = ""
+        self.division = "All"
         self.number = 0
         self.problems = []
-        response = requests.get(self.url)
+        response = http.get(self.url)
         soup = BeautifulSoup(response.text, "html.parser")
-        self.name = soup.find("li", class_="active").find("a").string.strip()
+        if name_anchor := soup.find("a", href=self.url[len(URL_PREFIX) :]):
+            self.name = name_anchor.string.strip()
         if match := re.search(r"\[.*?\]", self.name):
-            self.div = match.group(0)[1:-1]
+            self.division = match.group(0)[1:-1]
         if match := re.search(r"#\d+", self.name):
             self.number = int(match.group(0)[1:])
         problem_table = soup.find("table", class_="problems")
@@ -83,7 +94,7 @@ class Contest:
             "url": self.url,
             "name": self.name,
             "start_time": self.start_time,
-            "div": self.div,
+            "division": self.division,
             "number": self.number,
             "problems": [problem.json for problem in self.problems],
         }

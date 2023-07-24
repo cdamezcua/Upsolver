@@ -70,6 +70,34 @@ router.get(
   })
 );
 
+router.patch(
+  "/:teamId/groups/:groupId/submissions",
+  verifyToken,
+  verifyTeamMembership,
+  tryCatch(async (req, res) => {
+    const { userId, problemId } = req.query;
+    const { veredict } = req.body;
+    const submission = await Submission.findOne({
+      where: {
+        userId,
+        problemId,
+      },
+    });
+    if (submission) {
+      submission.veredict = veredict;
+      await submission.save();
+      res.status(200).json({ submission });
+    } else {
+      const newSubmission = await Submission.create({
+        userId,
+        problemId,
+        veredict,
+      });
+      res.status(201).json({ submission: newSubmission });
+    }
+  })
+);
+
 router.use(errorHandler);
 
 export default router;

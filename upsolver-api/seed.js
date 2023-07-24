@@ -9,6 +9,7 @@ import {
   Invitation,
   Contest,
   Problem,
+  Submission,
 } from "./models/index.js";
 import { sequelize } from "./database.js";
 import bcrypt from "bcrypt";
@@ -43,6 +44,10 @@ const problemData = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "./seeders/problems.json"), "utf8")
 );
 
+const submissionData = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "./seeders/submissions.json"), "utf8")
+);
+
 userData.forEach(async (user) => {
   user.password = await bcrypt.hash(user.password, ROUNDS_OF_HASHING);
 });
@@ -58,6 +63,7 @@ const seedDatabase = async () => {
       sequelize.query("DROP TABLE IF EXISTS invitations"),
       sequelize.query("DROP TABLE IF EXISTS contests"),
       sequelize.query("DROP TABLE IF EXISTS problems"),
+      sequelize.query("DROP TABLE IF EXISTS submissions"),
     ]);
 
     await sequelize.sync({ alter: true });
@@ -70,6 +76,7 @@ const seedDatabase = async () => {
       Invitation.bulkCreate(invitationData),
       Contest.bulkCreate(contestData),
       Problem.bulkCreate(problemData),
+      Submission.bulkCreate(submissionData),
     ]);
   } catch (error) {
     console.error("Error seeding data:", error);

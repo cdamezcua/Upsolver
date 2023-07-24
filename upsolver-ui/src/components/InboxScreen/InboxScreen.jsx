@@ -125,7 +125,11 @@ export default function InvoxScreen() {
                         <Typography variant="body1" noWrap>
                           {invitation.inviterName}
                         </Typography>
-                        <Typography noWrap variant="subtitle2" color={RANKING_COLORS[invitation.inviterRank]}>
+                        <Typography
+                          noWrap
+                          variant="subtitle2"
+                          color={RANKING_COLORS[invitation.inviterRank]}
+                        >
                           {invitation.inviterUsername}
                         </Typography>
                       </Box>

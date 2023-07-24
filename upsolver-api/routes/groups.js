@@ -82,9 +82,11 @@ router.post(
       }
     );
 
-    const createdContestsIds = await Promise.all(createContestPromises);
+    const createdContests = await Promise.all(createContestPromises);
 
-    res.status(201).json({ createdGroupId, createdContestsIds });
+    res
+      .status(201)
+      .json({ group: { id: createdGroupId, contests: createdContests } });
   })
 );
 

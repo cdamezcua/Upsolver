@@ -19,7 +19,8 @@ POST    /invitations/:invitationId/reject
 GET     /teams
 POST    /teams
 GET     /teams/:teamId
-GET     /teams/:teamId/users
+GET     /teams/:teamId/members
+GET     /teams/:teamId/members?membership=
 GET     /teams/:teamId/invitations
 POST    /teams/:teamId/invitations
 DELETE  /teams/:teamId/invitations/:invitationId
@@ -33,3 +34,11 @@ POST    /teams/:teamId/groups
 
 POST    /teams/:teamId/groups/:groupId/contests
 
+## Problems
+
+GET     /teams/:teamId/groups/:groupId/contests/problems
+
+## Submissions
+
+GET     /teams/:teamId/groups/:groupId/submissions?membership=
+PUT     /teams/:teamId/groups/:groupId/submissions?userId=&problemId=

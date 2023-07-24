@@ -12,10 +12,15 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Divider,
+  Fab,
+  Modal,
+  TextField,
 } from "@mui/material";
 import { UserContext } from "../../UserContext.js";
 import { useEffect, useContext } from "react";
 import Subtitle from "../Subtitle/Subtitle";
+import AddIcon from "@mui/icons-material/Add";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };

@@ -150,6 +150,29 @@ export default function GroupsScreen() {
       </Stack>
       <Box sx={{ m: "20px" }}>
         <TableContainer component={Paper}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              m: "20px",
+            }}
+          >
+            <Typography variant="h6">Groups</Typography>
+            <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
+              <Fab
+                variant="extended"
+                size="medium"
+                color="primary"
+                aria-label="add"
+                onClick={handleOpen}
+              >
+                <AddIcon sx={{ mr: 1 }} />
+                Create Group
+              </Fab>
+            </Stack>
+          </Box>
+          <Divider />
           <Table>
             <TableHead>
               <TableRow>

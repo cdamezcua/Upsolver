@@ -1,9 +1,8 @@
 import React from "react";
 import "./InboxScreen.css";
 import Navbar from "../Navbar/Navbar";
-import { Box, Divider, IconButton, Tab, Typography } from "@mui/material";
+import { Box, Divider, IconButton, Typography } from "@mui/material";
 import { Button, Stack, Avatar } from "@mui/material";
-import { Link } from "react-router-dom";
 import {
   Table,
   TableBody,

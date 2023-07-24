@@ -6,6 +6,7 @@ import { Group } from "./group.js";
 import { Invitation } from "./invitation.js";
 import { Contest } from "./contest.js";
 import { Problem } from "./problem.js";
+import { Submission } from "./submission.js";
 
 export {
   InvalidatedJWT,
@@ -16,4 +17,5 @@ export {
   Invitation,
   Contest,
   Problem,
+  Submission,
 };

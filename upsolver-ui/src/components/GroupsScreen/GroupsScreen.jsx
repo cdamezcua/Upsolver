@@ -62,25 +62,26 @@ export default function GroupsScreen() {
 
   const [groups, setGroups] = React.useState([]);
 
-  useEffect(() => {
-    async function fetchGroupsOfTeam() {
-      try {
-        const response = await fetch(
-          "http://localhost:3001/teams/" + teamId + "/groups",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              "x-access-token": user?.token,
-            },
-          }
-        );
-        const data = await response.json();
-        setGroups(data.groups ?? []);
-      } catch (error) {
-        console.log(error);
-      }
+  async function fetchGroupsOfTeam() {
+    try {
+      const response = await fetch(
+        "http://localhost:3001/teams/" + teamId + "/groups",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user?.token,
+          },
+        }
+      );
+      const data = await response.json();
+      setGroups(data.groups ?? []);
+    } catch (error) {
+      console.log(error);
     }
+  }
+
+  useEffect(() => {
     fetchGroupsOfTeam();
   }, [user]);
 

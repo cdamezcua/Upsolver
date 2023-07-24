@@ -58,7 +58,7 @@ export default function GroupsScreen() {
       }
     }
     fetchTeam();
-  }, [user]);
+  }, [user, teamId]);
 
   const [groups, setGroups] = React.useState([]);
 

@@ -176,29 +176,26 @@ export default function GroupsScreen() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>
-                  <Typography variant="h6">Group</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="h6">Progress</Typography>
-                </TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Progress</TableCell>
+                <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {groups.map((group) => (
                 <TableRow key={group.id}>
-                  <TableCell component="th" scope="row">
-                    <Link
-                      className="button-link"
-                      to={`/team/${teamId}/group/${group.id}`}
-                    >
-                      <Typography variant="body1">{group.name}</Typography>
+                  <TableCell>
+                    <Link to={`/team/${teamId}/group/${group.id}`}>
+                      <Typography variant="h6" noWrap={true}>
+                        {group.name}
+                      </Typography>
                     </Link>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="body1">
-                      [////////-----------------------] 10 / 30 [PLACEHOLDER]
-                    </Typography>
+                    <Typography variant="body1">{"[######-------]"}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body1">{"[ BUTTON ]"}</Typography>
                   </TableCell>
                 </TableRow>
               ))}

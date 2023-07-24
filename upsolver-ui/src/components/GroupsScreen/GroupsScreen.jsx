@@ -123,22 +123,30 @@ export default function GroupsScreen() {
           ? team.name + " - " + team.university
           : ""}
       </Subtitle>
-      <Stack spacing={2} direction="row" sx={{ m: "20px" }}>
-        <Button variant="contained" color="primary" className="page-button">
-          <Link className="button-link" to={`/team/${teamId}/groups`}>
-            Groups
-          </Link>
-        </Button>
-        <Button variant="contained" color="primary" className="page-button">
-          <Link className="button-link" to={`/team/${teamId}/members`}>
-            Members
-          </Link>
-        </Button>
-        <Button variant="contained" color="primary" className="page-button">
-          <Link className="button-link" to={`/team/${teamId}/invitations`}>
-            Invitations
-          </Link>
-        </Button>
+      <Stack
+        spacing={2}
+        direction="row"
+        sx={{ m: "20px" }}
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <Stack direction="row" spacing={2}>
+          <Button variant="contained" color="primary" className="page-button">
+            <Link className="button-link" to={`/team/${teamId}/groups`}>
+              Groups
+            </Link>
+          </Button>
+          <Button variant="contained" color="primary" className="page-button">
+            <Link className="button-link" to={`/team/${teamId}/members`}>
+              Members
+            </Link>
+          </Button>
+          <Button variant="contained" color="primary" className="page-button">
+            <Link className="button-link" to={`/team/${teamId}/invitations`}>
+              Invitations
+            </Link>
+          </Button>
+        </Stack>
       </Stack>
       <Box sx={{ m: "20px" }}>
         <TableContainer component={Paper}>

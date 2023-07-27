@@ -5,7 +5,9 @@ import { FRONT_END_BASE_URL } from "./constants/urls.js";
 import { PORT, SOCKET_PORT } from "./constants/config.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { InvalidatedJWT } from "./models/index.js";
 
 dotenv.config();
 
@@ -24,6 +26,27 @@ const io = new Server(httpServer, {
     origin: FRONT_END_BASE_URL,
     methods: ["GET", "POST"],
   },
+});
+
+io.use(async (socket, next) => {
+  const token = socket.handshake.auth.token;
+  if (!token) {
+    return next(new Error("Authentication error: [!] Token missing."));
+  }
+
+  try {
+    const decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+    const denylisted = await InvalidatedJWT.findOne({ where: { token } });
+    if (denylisted) {
+      return next(new Error("Authentication error: [!] Token denylisted."));
+    }
+    socket.decodedToken = decodedToken;
+    next();
+  } catch (err) {
+    return next(
+      new Error("Authentication error: [!] Invalid or expired token.")
+    );
+  }
 });
 
 io.on("connection", (socket) => {

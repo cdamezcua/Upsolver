@@ -8,6 +8,7 @@ import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { InvalidatedJWT } from "./models/index.js";
+import { User, Role, Team, Group, Contest, Problem } from "./models/index.js";
 
 dotenv.config();
 
@@ -51,6 +52,47 @@ io.use(async (socket, next) => {
 
 io.on("connection", (socket) => {
   socket.on("join", async (room) => {
+    const getMembership = async (userId, problemId) => {
+      try {
+        const problems = await Problem.findAll({
+          include: [
+            {
+              model: Contest,
+              include: [
+                {
+                  model: Group,
+                  include: [
+                    {
+                      model: Team,
+                      include: [
+                        {
+                          model: Role,
+                          where: { userId },
+                          include: [{ model: User }],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          where: { id: problemId },
+        });
+        return problems.length > 0;
+      } catch (error) {
+        return false;
+      }
+    };
+    const userId = socket.decodedToken.user_id;
+    const problemId = room.id;
+
+    if ((await getMembership(userId, problemId)) === false) {
+      return socket.emit(
+        "join_error",
+        `[!] You dont have access to room ${room.id}`
+      );
+    }
     socket.join(room.id);
   });
 

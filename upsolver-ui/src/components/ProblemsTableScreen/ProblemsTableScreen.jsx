@@ -18,18 +18,20 @@ import {
   FormControl,
   Select,
   MenuItem,
+  IconButton,
 } from "@mui/material";
 import { UserContext } from "../../UserContext.js";
 import { useEffect, useContext } from "react";
 import Subtitle from "../Subtitle/Subtitle";
 import AddIcon from "@mui/icons-material/Add";
 import { DIVISION_COLORS } from "../../constants/config";
+import ForumIcon from "@mui/icons-material/Forum";
+import ChatDialog from "../ChatDialog/ChatDialog";
 
 export default function ProblemsTableScreen() {
+  const { user } = useContext(UserContext);
   const teamId = window.location.pathname.split("/")[2];
   const groupsId = window.location.pathname.split("/")[4];
-
-  const { user } = useContext(UserContext);
 
   const [team, setTeam] = React.useState([]);
   useEffect(() => {
@@ -52,7 +54,6 @@ export default function ProblemsTableScreen() {
   }, [user, teamId]);
 
   const [contestsProblems, setContestsProblems] = React.useState([]);
-
   useEffect(() => {
     async function fetchContestsProblems() {
       try {
@@ -80,7 +81,6 @@ export default function ProblemsTableScreen() {
   }, [user, teamId, groupsId]);
 
   const [contestants, setContestants] = React.useState([]);
-
   useEffect(() => {
     async function fetchContestants() {
       try {
@@ -106,7 +106,6 @@ export default function ProblemsTableScreen() {
   }, [user, teamId]);
 
   const [submissions, setSubmissions] = React.useState([]);
-
   useEffect(() => {
     async function fetchSubmissions() {
       try {
@@ -132,6 +131,9 @@ export default function ProblemsTableScreen() {
     }
     fetchSubmissions();
   }, [user, teamId, groupsId]);
+
+  const [isChatOpen, setIsChatOpen] = React.useState(false);
+  const [activeContestProblem, setActiveContestProblem] = React.useState({});
 
   return (
     <>
@@ -208,6 +210,7 @@ export default function ProblemsTableScreen() {
                   </TableCell>
                 ))}
                 <TableCell>Problem Solved Count</TableCell>
+                <TableCell>Chat</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -316,12 +319,29 @@ export default function ProblemsTableScreen() {
                     </TableCell>
                   ))}
                   <TableCell>{contestProblem.problemSolvedCount}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      color="primary"
+                      onClick={() => {
+                        setActiveContestProblem(contestProblem);
+                        setIsChatOpen(true);
+                      }}
+                    >
+                      <ForumIcon />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
       </Box>
+      <ChatDialog
+        isChatOpen={isChatOpen}
+        setIsChatOpen={setIsChatOpen}
+        activeContestProblem={activeContestProblem}
+        setActiveContestProblem={setActiveContestProblem}
+      />
     </>
   );
 }

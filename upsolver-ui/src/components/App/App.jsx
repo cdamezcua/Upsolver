@@ -34,7 +34,11 @@ export default function App() {
       token: user?.token,
     };
     socket.connect();
+    socket.on("connect_error", (err) => {
+      console.error("[!] Unable to connect to server", err.message);
+    });
     return () => {
+      socket.off("connect_error");
       socket.disconnect();
     };
   }, [user]);

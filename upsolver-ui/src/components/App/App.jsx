@@ -13,6 +13,7 @@ import MembersScreen from "../MembersScreen/MembersScreen";
 import InboxScreen from "../InboxScreen/InboxScreen";
 import OutboxScreen from "../OutboxScreen/OutboxScreen";
 import ProblemsTableScreen from "../ProblemsTableScreen/ProblemsTableScreen";
+import { socket } from "../../socket";
 
 export default function App() {
   const [user, setUser] = useState(() => {
@@ -26,6 +27,20 @@ export default function App() {
 
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
+  }, [user]);
+
+  useEffect(() => {
+    socket.auth = {
+      token: user?.token,
+    };
+    socket.connect();
+    socket.on("connect_error", (err) => {
+      console.error("[!] Unable to connect to server", err.message);
+    });
+    return () => {
+      socket.off("connect_error");
+      socket.disconnect();
+    };
   }, [user]);
 
   useEffect(() => {

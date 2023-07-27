@@ -30,6 +30,16 @@ export default function App() {
   }, [user]);
 
   useEffect(() => {
+    socket.auth = {
+      token: user?.token,
+    };
+    socket.connect();
+    return () => {
+      socket.disconnect();
+    };
+  }, [user]);
+
+  useEffect(() => {
     async function deletUserIfNotLoggedIn() {
       try {
         const response = await fetch(

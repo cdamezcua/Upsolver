@@ -1,0 +1,37 @@
+[
+  {
+    "userId": 1,
+    "problemId": 1,
+    "veredict": "AC"
+  },
+  {
+    "userId": 1,
+    "problemId": 2,
+    "veredict": "WA"
+  },
+  {
+    "userId": 1,
+    "problemId": 3,
+    "veredict": "TLE"
+  },
+  {
+    "userId": 1,
+    "problemId": 4,
+    "veredict": "WA"
+  },
+  {
+    "userId": 2,
+    "problemId": 1,
+    "veredict": "AC"
+  },
+  {
+    "userId": 2,
+    "problemId": 2,
+    "veredict": "AC"
+  },
+  {
+    "userId": 7,
+    "problemId": 1,
+    "veredict": "TLE"
+  }
+]

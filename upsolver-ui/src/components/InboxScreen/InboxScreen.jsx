@@ -1,9 +1,8 @@
 import React from "react";
 import "./InboxScreen.css";
 import Navbar from "../Navbar/Navbar";
-import { Box, Divider, IconButton, Tab, Typography } from "@mui/material";
+import { Box, Divider, IconButton, Typography } from "@mui/material";
 import { Button, Stack, Avatar } from "@mui/material";
-import { Link } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -126,7 +125,11 @@ export default function InvoxScreen() {
                         <Typography variant="body1" noWrap>
                           {invitation.inviterName}
                         </Typography>
-                        <Typography noWrap variant="subtitle2" color={RANKING_COLORS[invitation.inviterRank]}>
+                        <Typography
+                          noWrap
+                          variant="subtitle2"
+                          color={RANKING_COLORS[invitation.inviterRank]}
+                        >
                           {invitation.inviterUsername}
                         </Typography>
                       </Box>

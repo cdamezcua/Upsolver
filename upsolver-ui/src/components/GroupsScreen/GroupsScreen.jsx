@@ -12,22 +12,27 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Divider,
+  Fab,
+  Modal,
+  TextField,
 } from "@mui/material";
 import { UserContext } from "../../UserContext.js";
 import { useEffect, useContext } from "react";
 import Subtitle from "../Subtitle/Subtitle";
+import AddIcon from "@mui/icons-material/Add";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 600,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 export default function GroupsScreen() {
   const teamId = window.location.pathname.split("/")[2];
@@ -53,31 +58,62 @@ export default function GroupsScreen() {
       }
     }
     fetchTeam();
-  }, [user]);
+  }, [user, teamId]);
 
   const [groups, setGroups] = React.useState([]);
 
-  useEffect(() => {
-    async function fetchGroupsOfTeam() {
-      try {
-        const response = await fetch(
-          "http://localhost:3001/teams/" + teamId + "/groups",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              "x-access-token": user?.token,
-            },
-          }
-        );
-        const data = await response.json();
-        setGroups(data.groups ?? []);
-      } catch (error) {
-        console.log(error);
-      }
+  async function fetchGroupsOfTeam() {
+    try {
+      const response = await fetch(
+        "http://localhost:3001/teams/" + teamId + "/groups",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user?.token,
+          },
+        }
+      );
+      const data = await response.json();
+      setGroups(data.groups ?? []);
+    } catch (error) {
+      console.log(error);
     }
+  }
+
+  useEffect(() => {
     fetchGroupsOfTeam();
-  }, [user]);
+  }, [user, teamId]);
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const [url, setUrl] = React.useState("");
+
+  const handleCreateGroup = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3001/teams/" + teamId + "/groups",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user?.token,
+          },
+          body: JSON.stringify({
+            group_constructor: {
+              url: url,
+            },
+          }),
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -87,51 +123,79 @@ export default function GroupsScreen() {
           ? team.name + " - " + team.university
           : ""}
       </Subtitle>
-      <Stack spacing={2} direction="row" sx={{ m: "20px" }}>
-        <Button variant="contained" color="primary" className="page-button">
-          <Link className="button-link" to={`/team/${teamId}/groups`}>
-            Groups
-          </Link>
-        </Button>
-        <Button variant="contained" color="primary" className="page-button">
-          <Link className="button-link" to={`/team/${teamId}/members`}>
-            Members
-          </Link>
-        </Button>
-        <Button variant="contained" color="primary" className="page-button">
-          <Link className="button-link" to={`/team/${teamId}/invitations`}>
-            Invitations
-          </Link>
-        </Button>
+      <Stack
+        spacing={2}
+        direction="row"
+        sx={{ m: "20px" }}
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <Stack direction="row" spacing={2}>
+          <Button variant="contained" color="primary" className="page-button">
+            <Link className="button-link" to={`/team/${teamId}/groups`}>
+              Groups
+            </Link>
+          </Button>
+          <Button variant="contained" color="primary" className="page-button">
+            <Link className="button-link" to={`/team/${teamId}/members`}>
+              Members
+            </Link>
+          </Button>
+          <Button variant="contained" color="primary" className="page-button">
+            <Link className="button-link" to={`/team/${teamId}/invitations`}>
+              Invitations
+            </Link>
+          </Button>
+        </Stack>
       </Stack>
       <Box sx={{ m: "20px" }}>
         <TableContainer component={Paper}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              m: "20px",
+            }}
+          >
+            <Typography variant="h6">Groups</Typography>
+            <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
+              <Fab
+                variant="extended"
+                size="medium"
+                color="primary"
+                aria-label="add"
+                onClick={handleOpen}
+              >
+                <AddIcon sx={{ mr: 1 }} />
+                Create Group
+              </Fab>
+            </Stack>
+          </Box>
+          <Divider />
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>
-                  <Typography variant="h6">Group</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="h6">Progress</Typography>
-                </TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Progress</TableCell>
+                <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {groups.map((group) => (
                 <TableRow key={group.id}>
-                  <TableCell component="th" scope="row">
-                    <Link
-                      className="button-link"
-                      to={`/team/${teamId}/group/${group.id}`}
-                    >
-                      <Typography variant="body1">{group.name}</Typography>
+                  <TableCell>
+                    <Link to={`/team/${teamId}/group/${group.id}`}>
+                      <Typography variant="h6" noWrap={true}>
+                        {group.name}
+                      </Typography>
                     </Link>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="body1">
-                      [////////-----------------------] 10 / 30 [PLACEHOLDER]
-                    </Typography>
+                    <Typography variant="body1">{"[######-------]"}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body1">{"[ BUTTON ]"}</Typography>
                   </TableCell>
                 </TableRow>
               ))}
@@ -139,6 +203,39 @@ export default function GroupsScreen() {
           </Table>
         </TableContainer>
       </Box>
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={modalStyle}>
+          <form
+            onSubmit={async (event) => {
+              event.preventDefault();
+              await handleCreateGroup();
+              console.log("Group created");
+              fetchGroupsOfTeam();
+            }}
+          >
+            <Paper sx={{ p: 2 }}>
+              <Typography variant="h6">Create Group</Typography>
+              <Divider sx={{ my: 2 }} />
+              <Stack direction="row" spacing={2}>
+                <TextField
+                  label="URL"
+                  variant="outlined"
+                  fullWidth
+                  required
+                  value={url}
+                  onChange={(event) => setUrl(event.target.value)}
+                />
+              </Stack>
+              <Divider sx={{ my: 2 }} />
+              <Stack direction="row" spacing={2} sx={{ justifyContent: "end" }}>
+                <Button variant="contained" color="primary" type="submit">
+                  Create
+                </Button>
+              </Stack>
+            </Paper>
+          </form>
+        </Box>
+      </Modal>
     </>
   );
 }

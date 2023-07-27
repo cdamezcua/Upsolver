@@ -11,3 +11,11 @@ export const RANKING_COLORS = {
   "international grandmaster": "#ff0000",
   "legendary grandmaster": "#ff0000",
 };
+
+export const DIVISION_COLORS = {
+  DivA: "error",
+  DivB: "warning",
+  DivC: "primary",
+  DivD: "success",
+  All: "secondary",
+};

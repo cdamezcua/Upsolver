@@ -50,7 +50,7 @@ export default function MembersScreen() {
     async function fetchMembersOfTeam() {
       try {
         const response = await fetch(
-          "http://localhost:3001/teams/" + teamId + "/users",
+          "http://localhost:3001/teams/" + teamId + "/members",
           {
             method: "GET",
             headers: {
@@ -59,7 +59,8 @@ export default function MembersScreen() {
             },
           }
         );
-        const members = await response.json();
+        const data = await response.json();
+        const members = data.members ?? [];
         setMembers(members);
       } catch (error) {
         console.log(error);

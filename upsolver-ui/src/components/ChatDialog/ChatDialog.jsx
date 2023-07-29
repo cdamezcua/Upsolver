@@ -19,6 +19,7 @@ export default function ChatDialog({
   setActiveContestProblem,
 }) {
   const { user } = useContext(UserContext);
+  const teamId = window.location.pathname.split("/")[2];
   const [messages, setMessages] = React.useState([]);
   const [newMessage, setNewMessage] = React.useState("");
   const chatContainerRef = React.useRef(null);
@@ -27,6 +28,31 @@ export default function ChatDialog({
     setActiveContestProblem({});
     setMessages([]);
   };
+
+  useEffect(() => {
+    if (activeContestProblem.problemId !== undefined) {
+      async function fetchMessages() {
+        try {
+          const response = await fetch(
+            `http://localhost:3001/teams/${teamId}/problems/${activeContestProblem.problemId}/messages`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                "x-access-token": user?.token,
+              },
+            }
+          );
+          const data = await response.json();
+          console.log("fetchMessages response: ", data);
+          setMessages(data.messages);
+        } catch (error) {
+          console.log("fetchMessages error: ", error);
+        }
+      }
+      fetchMessages();
+    }
+  }, [activeContestProblem.problemId, teamId, user?.token]);
 
   useEffect(() => {
     if (activeContestProblem.problemId !== undefined) {
@@ -57,6 +83,23 @@ export default function ChatDialog({
       senderRank: user.rank,
       roomId: activeContestProblem.problemId,
     });
+    try {
+      fetch(
+        `http://localhost:3001/teams/${teamId}/problems/${activeContestProblem.problemId}/messages`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user?.token,
+          },
+          body: JSON.stringify({
+            content: newMessage,
+          }),
+        }
+      );
+    } catch (error) {
+      console.log("handleSendMessage error: ", error);
+    }
     setNewMessage("");
   };
 

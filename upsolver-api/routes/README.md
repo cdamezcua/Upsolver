@@ -42,3 +42,8 @@ GET     /teams/:teamId/groups/:groupId/contests/problems
 
 GET     /teams/:teamId/groups/:groupId/submissions?membership=
 PUT     /teams/:teamId/groups/:groupId/submissions?userId=&problemId=
+
+## Messages
+
+GET     /teams/:teamId/problems/:problemId/messages
+POST    /teams/:teamId/problems/:problemId/messages

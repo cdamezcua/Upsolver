@@ -1,16 +1,16 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import {
-  User,
-  Team,
-  Role,
-  Group,
-  Invitation,
-  Contest,
-  Problem,
-  Submission,
-} from "./models/index.js";
+import { InvalidatedJWT } from "./models/invalidatedJWT.js";
+import { User } from "./models/user.js";
+import { Team } from "./models/team.js";
+import { Role } from "./models/role.js";
+import { Group } from "./models/group.js";
+import { Invitation } from "./models/invitation.js";
+import { Contest } from "./models/contest.js";
+import { Problem } from "./models/problem.js";
+import { Submission } from "./models/submission.js";
+import { Message } from "./models/message.js";
 import { sequelize } from "./database.js";
 import bcrypt from "bcrypt";
 import { ROUNDS_OF_HASHING } from "./constants/config.js";
@@ -48,6 +48,10 @@ const submissionData = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "./seeders/submissions.json"), "utf8")
 );
 
+const messageData = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "./seeders/messages.json"), "utf8")
+);
+
 userData.forEach(async (user) => {
   user.password = await bcrypt.hash(user.password, ROUNDS_OF_HASHING);
 });
@@ -64,6 +68,7 @@ const seedDatabase = async () => {
       sequelize.query("DROP TABLE IF EXISTS contests"),
       sequelize.query("DROP TABLE IF EXISTS problems"),
       sequelize.query("DROP TABLE IF EXISTS submissions"),
+      sequelize.query("DROP TABLE IF EXISTS messages"),
     ]);
 
     await sequelize.sync({ alter: true });
@@ -77,6 +82,7 @@ const seedDatabase = async () => {
       Contest.bulkCreate(contestData),
       Problem.bulkCreate(problemData),
       Submission.bulkCreate(submissionData),
+      Message.bulkCreate(messageData),
     ]);
   } catch (error) {
     console.error("Error seeding data:", error);

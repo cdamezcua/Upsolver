@@ -28,6 +28,7 @@ DELETE  /teams/:teamId/invitations/:invitationId
 ## Groups
 
 GET     /teams/:teamId/groups
+GET     /teams/:teamId/groups/:groupId
 POST    /teams/:teamId/groups
 
 ## Contests

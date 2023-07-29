@@ -31,7 +31,7 @@ import ChatDialog from "../ChatDialog/ChatDialog";
 export default function ProblemsTableScreen() {
   const { user } = useContext(UserContext);
   const teamId = window.location.pathname.split("/")[2];
-  const groupsId = window.location.pathname.split("/")[4];
+  const groupId = window.location.pathname.split("/")[4];
 
   const [team, setTeam] = React.useState([]);
   useEffect(() => {
@@ -53,6 +53,29 @@ export default function ProblemsTableScreen() {
     fetchTeam();
   }, [user, teamId]);
 
+  const [group, setGroup] = React.useState({});
+  useEffect(() => {
+    async function fetchGroup() {
+      try {
+        const response = await fetch(
+          "http://localhost:3001/teams/" + teamId + "/groups/" + groupId,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "x-access-token": user?.token,
+            },
+          }
+        );
+        const data = await response.json();
+        setGroup(data.group ?? {});
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchGroup();
+  }, [user, teamId, groupId]);
+
   const [contestsProblems, setContestsProblems] = React.useState([]);
   useEffect(() => {
     async function fetchContestsProblems() {
@@ -61,7 +84,7 @@ export default function ProblemsTableScreen() {
           "http://localhost:3001/teams/" +
             teamId +
             "/groups/" +
-            groupsId +
+            groupId +
             "/contests/problems",
           {
             method: "GET",
@@ -78,7 +101,7 @@ export default function ProblemsTableScreen() {
       }
     }
     fetchContestsProblems();
-  }, [user, teamId, groupsId]);
+  }, [user, teamId, groupId]);
 
   const [contestants, setContestants] = React.useState([]);
   useEffect(() => {
@@ -113,7 +136,7 @@ export default function ProblemsTableScreen() {
           "http://localhost:3001/teams/" +
             teamId +
             "/groups/" +
-            groupsId +
+            groupId +
             "/submissions?membership=contestant",
           {
             method: "GET",
@@ -130,7 +153,7 @@ export default function ProblemsTableScreen() {
       }
     }
     fetchSubmissions();
-  }, [user, teamId, groupsId]);
+  }, [user, teamId, groupId]);
 
   const [isChatOpen, setIsChatOpen] = React.useState(false);
   const [activeContestProblem, setActiveContestProblem] = React.useState({});
@@ -178,7 +201,7 @@ export default function ProblemsTableScreen() {
               m: "20px",
             }}
           >
-            <Typography variant="h6">Training Camp México 2023**</Typography>
+            <Typography variant="h6">{group.name ? group.name : ""}</Typography>
             <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
               <Fab
                 variant="extended"
@@ -281,7 +304,7 @@ export default function ProblemsTableScreen() {
                                       "http://localhost:3001/teams/" +
                                         teamId +
                                         "/groups/" +
-                                        groupsId +
+                                        groupId +
                                         "/submissions/" +
                                         "?userId=" +
                                         contestant.id +

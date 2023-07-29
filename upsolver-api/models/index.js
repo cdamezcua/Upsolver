@@ -7,6 +7,7 @@ import { Invitation } from "./invitation.js";
 import { Contest } from "./contest.js";
 import { Problem } from "./problem.js";
 import { Submission } from "./submission.js";
+import { Message } from "./message.js";
 
 User.hasMany(Role);
 Role.belongsTo(User);
@@ -33,4 +34,5 @@ export {
   Contest,
   Problem,
   Submission,
+  Message,
 };

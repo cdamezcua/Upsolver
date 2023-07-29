@@ -38,6 +38,34 @@ router.get(
   })
 );
 
+router.get(
+  "/:teamId/groups/:groupId",
+  verifyToken,
+  verifyTeamMembership,
+  tryCatch(async (req, res) => {
+    const { teamId, groupId } = req.params;
+    const getGroup = `
+        SELECT
+            G.id
+            ,G.teamId
+            ,G.url
+            ,G.name
+            ,G.createdAt
+            ,G.updatedAt
+        FROM
+            groups G
+        WHERE
+            G.teamId = ${teamId}
+            AND G.id = ${groupId};`;
+    const group = await sequelize.query(getGroup, {
+      type: sequelize.QueryTypes.SELECT,
+      model: Group,
+      mapToModel: true,
+    });
+    res.status(200).json({ group: group[0] ?? {} });
+  })
+);
+
 router.post(
   "/:teamId/groups",
   verifyToken,

@@ -34,6 +34,25 @@ router.get(
   })
 );
 
+router.post(
+  "/:teamId/problems/:problemId/messages",
+  verifyToken,
+  verifyTeamMembership,
+  tryCatch(async (req, res) => {
+    const { content } = req.body;
+    const { user_id } = req.user;
+    const { problemId } = req.params;
+    const createMessage = `
+        INSERT INTO messages (problemId, senderId, content)
+        VALUES (${problemId}, ${user_id}, '${content}')
+        `;
+    await sequelize.query(createMessage, {
+      type: sequelize.QueryTypes.INSERT,
+    });
+    return res.status(200).json({ message: "Message sent successfully" });
+  })
+);
+
 router.use(errorHandler);
 
 export default router;

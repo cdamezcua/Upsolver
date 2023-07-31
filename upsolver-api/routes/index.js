@@ -7,9 +7,11 @@ import contestsRoutes from "./contests.js";
 import problemsRoutes from "./problems.js";
 import submissionssRoutes from "./submissions.js";
 import messagesRoutes from "./messages.js";
+import progressesRoutes from "./progresses.js";
 
 const router = express.Router();
 
+router.use("/teams", progressesRoutes);
 router.use("/teams", messagesRoutes);
 router.use("/teams", submissionssRoutes);
 router.use("/teams", problemsRoutes);

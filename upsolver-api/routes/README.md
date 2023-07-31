@@ -48,3 +48,8 @@ PUT     /teams/:teamId/groups/:groupId/submissions?userId=&problemId=
 
 GET     /teams/:teamId/problems/:problemId/messages
 POST    /teams/:teamId/problems/:problemId/messages
+
+## Progresses
+
+GET     /teams/:teamId/groups/:groupId/progresses?membership=
+GET     /teams/:teamId/progresses?membership=

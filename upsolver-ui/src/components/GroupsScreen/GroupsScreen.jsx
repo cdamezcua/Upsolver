@@ -20,7 +20,26 @@ import {
 import { UserContext } from "../../UserContext.js";
 import { useEffect, useContext } from "react";
 import Subtitle from "../Subtitle/Subtitle";
+import { LoadingButton } from "@mui/lab";
 import AddIcon from "@mui/icons-material/Add";
+import LinearProgress, {
+  linearProgressClasses,
+} from "@mui/material/LinearProgress";
+import { styled } from "@mui/material/styles";
+import { RANKING_COLORS } from "../../constants/config.js";
+
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+  height: 10,
+  borderRadius: 5,
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    backgroundColor:
+      theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
+  },
+  [`& .${linearProgressClasses.bar}`]: {
+    borderRadius: 5,
+    backgroundColor: theme.palette.mode === "light" ? "#1a90ff" : "#308fe8",
+  },
+}));
 
 const modalStyle = {
   position: "absolute",
@@ -39,29 +58,26 @@ export default function GroupsScreen() {
 
   const { user } = useContext(UserContext);
 
-  const [team, setTeam] = React.useState([]);
+  const [loadingCreateGroup, setLoadingCreateGroup] = React.useState(false);
 
-  useEffect(() => {
-    async function fetchTeam() {
-      try {
-        const response = await fetch("http://localhost:3001/teams/" + teamId, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token": user?.token,
-          },
-        });
-        const data = await response.json();
-        setTeam(data.team ?? {});
-      } catch (error) {
-        console.log(error);
-      }
+  const [team, setTeam] = React.useState([]);
+  async function fetchTeam() {
+    try {
+      const response = await fetch("http://localhost:3001/teams/" + teamId, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": user?.token,
+        },
+      });
+      const data = await response.json();
+      setTeam(data.team ?? {});
+    } catch (error) {
+      console.log(error);
     }
-    fetchTeam();
-  }, [user, teamId]);
+  }
 
   const [groups, setGroups] = React.useState([]);
-
   async function fetchGroupsOfTeam() {
     try {
       const response = await fetch(
@@ -81,8 +97,58 @@ export default function GroupsScreen() {
     }
   }
 
+  const [progresses, setProgresses] = React.useState([]);
+  async function fetchProgressesOfMembers() {
+    try {
+      const response = await fetch(
+        "http://localhost:3001/teams/" +
+          teamId +
+          "/progresses?membership=contestant",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": user?.token,
+          },
+        }
+      );
+      const data = await response.json();
+      setProgresses(data.progresses ?? []);
+      console.log(data.progresses);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
+    fetchTeam();
     fetchGroupsOfTeam();
+    fetchProgressesOfMembers();
+  }, [user, teamId]);
+
+  const [contestants, setContestants] = React.useState([]);
+  useEffect(() => {
+    async function fetchContestants() {
+      try {
+        const response = await fetch(
+          "http://localhost:3001/teams/" +
+            teamId +
+            "/members?membership=contestant",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "x-access-token": user?.token,
+            },
+          }
+        );
+        const data = await response.json();
+        setContestants(data.members ?? []);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchContestants();
   }, [user, teamId]);
 
   const [open, setOpen] = React.useState(false);
@@ -177,7 +243,18 @@ export default function GroupsScreen() {
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell>Progress</TableCell>
+                {contestants.map((contestant) => (
+                  <TableCell>
+                    <Typography
+                      noWrap
+                      variant="subtitle2"
+                      sx={{ textAlign: "center" }}
+                      color={RANKING_COLORS[contestant.rank]}
+                    >
+                      {contestant.username}
+                    </Typography>
+                  </TableCell>
+                ))}
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -191,9 +268,54 @@ export default function GroupsScreen() {
                       </Typography>
                     </Link>
                   </TableCell>
-                  <TableCell>
-                    <Typography variant="body1">{"[######-------]"}</Typography>
-                  </TableCell>
+                  {contestants.map((contestant) =>
+                    progresses.find(
+                      (progress) =>
+                        progress.userId === contestant.id &&
+                        progress.groupId === group.id
+                    ) ? (
+                      <TableCell sx={{ width: "100px" }}>
+                        <Stack direction="row" spacing={2} alignItems="center">
+                          <BorderLinearProgress
+                            variant="determinate"
+                            sx={{ flexGrow: 1 }}
+                            value={
+                              (100 *
+                                (progresses.find(
+                                  (progress) =>
+                                    progress.userId === contestant.id &&
+                                    progress.groupId === group.id
+                                )?.numberOfSolvedProblems ?? 0)) /
+                              (progresses.find(
+                                (progress) =>
+                                  progress.userId === contestant.id &&
+                                  progress.groupId === group.id
+                              )?.numberOfProblemsOfTeam ?? 0)
+                            }
+                          />
+                          <Typography
+                            variant="caption"
+                            sx={{ textAlign: "center" }}
+                          >
+                            {(progresses.find(
+                              (progress) =>
+                                progress.userId === contestant.id &&
+                                progress.groupId === group.id
+                            )?.numberOfSolvedProblems ?? 0) +
+                              " / " +
+                              (progresses.find(
+                                (progress) =>
+                                  progress.userId === contestant.id &&
+                                  progress.groupId === group.id
+                              )?.numberOfProblemsOfTeam ?? 0)}
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                    ) : (
+                      <TableCell />
+                    )
+                  )}
+
                   <TableCell>
                     <Typography variant="body1">{"[ BUTTON ]"}</Typography>
                   </TableCell>
@@ -208,9 +330,11 @@ export default function GroupsScreen() {
           <form
             onSubmit={async (event) => {
               event.preventDefault();
+              setLoadingCreateGroup(true);
               await handleCreateGroup();
               console.log("Group created");
               fetchGroupsOfTeam();
+              setLoadingCreateGroup(false);
             }}
           >
             <Paper sx={{ p: 2 }}>
@@ -228,9 +352,14 @@ export default function GroupsScreen() {
               </Stack>
               <Divider sx={{ my: 2 }} />
               <Stack direction="row" spacing={2} sx={{ justifyContent: "end" }}>
-                <Button variant="contained" color="primary" type="submit">
+                <LoadingButton
+                  variant="contained"
+                  color="primary"
+                  loading={loadingCreateGroup}
+                  type="submit"
+                >
                   Create
-                </Button>
+                </LoadingButton>
               </Stack>
             </Paper>
           </form>

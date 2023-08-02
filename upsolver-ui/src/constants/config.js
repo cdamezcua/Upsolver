@@ -1,4 +1,5 @@
 export const RANKING_COLORS = {
+  "": "#000000",
   unrated: "#000000",
   newbie: "#808080",
   pupil: "#008000",

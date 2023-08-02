@@ -58,6 +58,9 @@ router.post(
       rank: data.result[0].rank || "unrated",
       avatar: data.result[0].avatar,
       titlePhoto: data.result[0].titlePhoto,
+      country: data.result[0].country,
+      city: data.result[0].city,
+      organization: data.result[0].organization,
     });
 
     const token = jwt.sign(

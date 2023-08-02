@@ -41,6 +41,18 @@ export const User = sequelize.define("user", {
     type: DataTypes.STRING(255),
     allowNull: true,
   },
+  country: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
+  city: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
+  organization: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
   token: {
     type: DataTypes.STRING(255),
     allowNull: true,

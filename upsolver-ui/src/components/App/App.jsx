@@ -14,6 +14,7 @@ import InboxScreen from "../InboxScreen/InboxScreen";
 import OutboxScreen from "../OutboxScreen/OutboxScreen";
 import ProblemsTableScreen from "../ProblemsTableScreen/ProblemsTableScreen";
 import { socket } from "../../socket";
+import ProfileScreen from "../ProfileScreen/ProfileScreen";
 
 export default function App() {
   const [user, setUser] = useState(() => {
@@ -126,6 +127,10 @@ export default function App() {
             <Route
               path="/inbox"
               element={<ProtectedRoute element={<InboxScreen />} />}
+            />
+            <Route
+              path="/profile/my"
+              element={<ProtectedRoute element={<ProfileScreen />} />}
             />
           </Routes>
         </BrowserRouter>

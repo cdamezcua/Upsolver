@@ -130,34 +130,117 @@ class Contest:
         self.problems = []
         response = http.get(self.url)
         soup = BeautifulSoup(response.text, "html.parser")
-        if name_anchor := soup.find("a", href=self.url[len(URL_PREFIX) :]):
-            self.name = name_anchor.string.strip()
-        if match := re.search(r"\[.*?\]", self.name):
-            self.division = match.group(0)[1:-1]
-        if match := re.search(r"#\d+", self.name):
-            self.number = int(match.group(0)[1:])
-        problem_table = soup.find("table", class_="problems")
-        if problem_table:
-            table_rows = problem_table.find_all("tr")
-            for table_row in table_rows[1:]:
-                table_cells = table_row.find_all("td")
-                problem_url = table_cells[0].find("a")["href"]
-                if not problem_url.startswith(URL_PREFIX):
-                    problem_url = URL_PREFIX + problem_url
-                problem_number = table_cells[0].find("a").string.strip()
-                problem_name = table_cells[1].find("a").contents[1].strip()
-                problem_solved_count = 0
-                if len(table_cells) > 3:
-                    anchor = table_cells[3].find("a")
-                    if anchor and len(anchor.contents) > 1:
-                        problem_solved_count = int(
-                            anchor.contents[1].string.strip()[1:]
+        document = soup.prettify()
+        state = 0
+        rowIndex = -1
+        colIndex = 0
+        nameAnchorFound = False
+        href = ""
+        problem_url = ""
+        problem_number = 0
+        problem_name = ""
+        problem_solved_count = 0
+        for line in document.split("\n"):
+            line = line.strip()
+            if (
+                state == 0
+            ):  # in document looking for contest-name-anchor or problems-table
+                if (
+                    not nameAnchorFound
+                    and line.startswith("<a ")
+                    and 'href="' + self.url[len(URL_PREFIX) :] + '"' in line
+                ):
+                    state = 1
+                elif (
+                    line.startswith("<table ")
+                    and (match := re.search(r'class="(.+?)"', line))
+                    and re.search(r"problems", match.group(1))
+                ):
+                    rowIndex = 0
+                    state = 2
+            elif state == 1:  # in contest-name-anchor looking for contest name
+                if line.startswith("</a>"):
+                    nameAnchorFound = True
+                    state = 0
+                elif not line.startswith("<"):
+                    self.name = line.strip()
+                    if match := re.search(r"\[.*?\]", self.name):
+                        self.division = match.group(0)[1:-1]
+                    if match := re.search(r"#\d+", self.name):
+                        self.number = int(match.group(0)[1:])
+            elif state == 2:  # in problems-table looking for every tr and td
+                if line.startswith("</table>"):
+                    if problem_url != "":
+                        self.problems.append(
+                            Problem(
+                                problem_url,
+                                problem_number,
+                                problem_name,
+                                problem_solved_count,
+                            )
                         )
-                self.problems.append(
-                    Problem(
-                        problem_url, problem_number, problem_name, problem_solved_count
-                    )
-                )
+                    state = 0
+                elif line.startswith("<tr ") or line.startswith("<tr>"):
+                    rowIndex = rowIndex + 1
+                    colIndex = 0
+                    if problem_url != "":
+                        self.problems.append(
+                            Problem(
+                                problem_url,
+                                problem_number,
+                                problem_name,
+                                problem_solved_count,
+                            )
+                        )
+                    href = ""
+                    problem_url = ""
+                    problem_number = 0
+                    problem_name = ""
+                    problem_solved_count = 0
+                elif rowIndex == 0:  # ignore the first row
+                    continue
+                elif line.startswith("<td"):
+                    state = 3
+            elif state == 3:  # in problems-table>tr>td looking for info
+                if line.startswith("</td>"):
+                    colIndex += 1
+                    state = 2
+                elif colIndex == 0:
+                    if line.startswith("<a "):
+                        href = re.search(r'href="(.+?)"', line).group(1)
+                        state = 4
+                elif colIndex == 1:
+                    if line.startswith("<a "):
+                        state = 5
+                elif colIndex == 3:
+                    if line.startswith("<a "):
+                        state = 6
+            elif (
+                state == 4
+            ):  # in problems-table>tr>td[0]>a looking for problem_url and problem_number
+                if line.startswith("</a>"):
+                    state = 3
+                elif not line.startswith("<"):
+                    problem_url = href
+                    if not problem_url.startswith(URL_PREFIX):
+                        problem_url = URL_PREFIX + problem_url
+                    problem_number = line.strip()
+            elif state == 5:  # in problems-table>tr>td[1]>a looking for problem_name
+                if line.startswith("</a>"):
+                    state = 3
+                elif (
+                    not line.startswith("<")
+                    and not line.startswith("<!--")
+                    and not line.startswith("-->")
+                ):
+                    problem_name = line.strip()
+            elif (
+                state == 6
+            ):  # in problems-table>tr>td[3]>a looking for problem_solved_count
+                if line.startswith("</a>"):
+                    state = 3
+                elif not line.startswith("<") and len(line.strip()) > 1:
+                    problem_solved_count = int(line.strip()[1:])
         self.json = {
             "url": self.url,
             "name": self.name,

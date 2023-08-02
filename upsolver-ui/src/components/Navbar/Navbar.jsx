@@ -9,6 +9,7 @@ import {
   Menu,
   MenuItem,
   ButtonBase,
+  Typography,
 } from "@mui/material";
 import UserNavCard from "../UserNavCard/UserNavCard";
 import { Link } from "react-router-dom";
@@ -67,6 +68,15 @@ export default function Navbar() {
             open={open}
             onClose={handleCloseUserMenu}
           >
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Link to="/profile/my" className="button-link">
+                <ButtonBase>
+                  <Typography textAlign="center" color="black">
+                    Profile
+                  </Typography>
+                </ButtonBase>
+              </Link>
+            </MenuItem>
             <MenuItem onClick={handleCloseUserMenu}>
               <LogoutButton />
             </MenuItem>

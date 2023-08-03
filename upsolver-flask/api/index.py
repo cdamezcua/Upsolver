@@ -12,27 +12,27 @@ URL_PREFIX = "https://codeforces.com"
 
 retry_strategy = Retry(total=4, status_forcelist=[429, 500, 502, 503, 504])
 
-http = requests.Session()
+http: requests.Session = requests.Session()
 
 http.mount("https://", HTTPAdapter(max_retries=retry_strategy))
 
 
 class Group:
-    def __init__(self, group_constructor):
-        self.url = group_constructor["url"]
-        response = http.get(self.url)
-        soup = BeautifulSoup(response.text, "html.parser")
-        document = soup.prettify()
-        state = 0
-        rowIndex = 0
-        colIndex = 0
-        divDepth = 0
-        href = ""
-        contest_url = ""
-        contest_start_time = ""
-        self.contest_constructors = []
+    def __init__(self, group_constructor: dict[str, str]) -> None:
+        self.url: str = group_constructor["url"]
+        response: requests.Response = http.get(self.url)
+        soup: BeautifulSoup = BeautifulSoup(response.text, "html.parser")
+        document: str = soup.prettify()
+        state: int = 0
+        rowIndex: int = 0
+        colIndex: int = 0
+        divDepth: int = 0
+        href: str = ""
+        contest_url: str = ""
+        contest_start_time: str = ""
+        self.contest_constructors: list[dict[str, str]] = []
         for line in document.split("\n"):
-            line = line.strip()
+            line: str = line.strip()
             if state == 0:  # in document looking for contests-table or sidebar
                 if line.startswith("<div") and "contests-table" in line:
                     rowIndex = 0
@@ -109,8 +109,8 @@ class Group:
                 if line.startswith("</a>"):
                     state = 7
                 elif not line.startswith("<"):
-                    self.name = line.strip()
-        self.json = {
+                    self.name: str = line.strip()
+        self.json: dict = {
             "url": self.url,
             "name": self.name,
             "contest_constructors": self.contest_constructors,
@@ -118,30 +118,30 @@ class Group:
 
 
 class Contest:
-    def __init__(self, contest_constructor):
-        self.url = contest_constructor["url"]
+    def __init__(self, contest_constructor: dict[str, str]) -> None:
+        self.url: str = contest_constructor["url"]
         try:
-            self.start_time = contest_constructor["start_time"]
+            self.start_time: str = contest_constructor["start_time"]
         except KeyError:
             self.start_time = "-"
-        self.name = ""
-        self.division = "All"
-        self.number = 0
-        self.problems = []
-        response = http.get(self.url)
-        soup = BeautifulSoup(response.text, "html.parser")
-        document = soup.prettify()
-        state = 0
-        rowIndex = -1
-        colIndex = 0
-        nameAnchorFound = False
-        href = ""
-        problem_url = ""
-        problem_number = 0
-        problem_name = ""
-        problem_solved_count = 0
+        self.name: str = ""
+        self.division: str = "All"
+        self.number: int = 0
+        self.problems: list[Problem] = []
+        response: requests.Response = http.get(self.url)
+        soup: BeautifulSoup = BeautifulSoup(response.text, "html.parser")
+        document: str = soup.prettify()
+        state: int = 0
+        rowIndex: int = -1
+        colIndex: int = 0
+        nameAnchorFound: bool = False
+        href: str = ""
+        problem_url: str = ""
+        problem_number: str = ""
+        problem_name: str = ""
+        problem_solved_count: int = 0
         for line in document.split("\n"):
-            line = line.strip()
+            line: str = line.strip()
             if (
                 state == 0
             ):  # in document looking for contest-name-anchor or problems-table
@@ -241,7 +241,7 @@ class Contest:
                     state = 3
                 elif not line.startswith("<") and len(line.strip()) > 1:
                     problem_solved_count = int(line.strip()[1:])
-        self.json = {
+        self.json: dict = {
             "url": self.url,
             "name": self.name,
             "start_time": self.start_time,
@@ -252,12 +252,12 @@ class Contest:
 
 
 class Problem:
-    def __init__(self, url, number, name, solved_count):
-        self.url = url
-        self.number = number
-        self.name = name
-        self.solved_count = solved_count
-        self.json = {
+    def __init__(self, url: str, number: str, name: str, solved_count: int) -> None:
+        self.url: str = url
+        self.number: str = number
+        self.name: str = name
+        self.solved_count: int = solved_count
+        self.json: dict = {
             "url": self.url,
             "number": self.number,
             "name": self.name,
@@ -271,15 +271,19 @@ CORS(app)
 
 
 @app.route("/")
-def home():
-    return "Hello, World!"
+def home() -> requests.Response:
+    return jsonify(
+        {
+            "message": "Hello, World!",
+        }
+    )
 
 
 @app.route("/groups", methods=["POST"])
-def groups():
-    data = request.get_json()
-    group_constructor = data["group_constructor"]
-    group = Group(group_constructor)
+def groups() -> requests.Response:
+    data: dict = request.get_json()
+    group_constructor: dict = data["group_constructor"]
+    group: Group = Group(group_constructor)
     return jsonify(
         {
             "group": group.json,
@@ -288,10 +292,10 @@ def groups():
 
 
 @app.route("/contests", methods=["POST"])
-def contests():
-    data = request.get_json()
-    contest_constructor = data["contest_constructor"]
-    contest = Contest(contest_constructor)
+def contests() -> requests.Response:
+    data: dict = request.get_json()
+    contest_constructor: dict = data["contest_constructor"]
+    contest: Contest = Contest(contest_constructor)
     return jsonify(
         {
             "contest": contest.json,

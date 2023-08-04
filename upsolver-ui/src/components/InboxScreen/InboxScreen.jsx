@@ -17,6 +17,7 @@ import { useEffect, useContext } from "react";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import Subtitle from "../Subtitle/Subtitle";
 import { RANKING_COLORS } from "../../constants/config.js";
+import { BACK_END_BASE_URL } from "../../constants/urls.js";
 
 export default function InvoxScreen() {
   const { user } = useContext(UserContext);
@@ -25,7 +26,7 @@ export default function InvoxScreen() {
 
   async function fetchInvitations() {
     try {
-      const response = await fetch("http://localhost:3001/invitations", {
+      const response = await fetch(BACK_END_BASE_URL + "/invitations", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -46,7 +47,7 @@ export default function InvoxScreen() {
   async function acceptInvitation(invitationId) {
     try {
       const response = await fetch(
-        "http://localhost:3001/invitations/" + invitationId + "/accept",
+        BACK_END_BASE_URL + "/invitations/" + invitationId + "/accept",
         {
           method: "POST",
           headers: {
@@ -65,7 +66,7 @@ export default function InvoxScreen() {
   async function rejectInvitation(invitationId) {
     try {
       const response = await fetch(
-        "http://localhost:3001/invitations/" + invitationId + "/reject",
+        BACK_END_BASE_URL + "/invitations/" + invitationId + "/reject",
         {
           method: "POST",
           headers: {

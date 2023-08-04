@@ -17,6 +17,7 @@ import { UserContext } from "../../UserContext.js";
 import { useEffect, useContext } from "react";
 import Subtitle from "../Subtitle/Subtitle";
 import { RANKING_COLORS } from "../../constants/config.js";
+import { BACK_END_BASE_URL } from "../../constants/urls.js";
 
 export default function MembersScreen() {
   const { user } = useContext(UserContext);
@@ -28,7 +29,7 @@ export default function MembersScreen() {
   useEffect(() => {
     async function fetchTeam() {
       try {
-        const response = await fetch("http://localhost:3001/teams/" + teamId, {
+        const response = await fetch(BACK_END_BASE_URL + "/teams/" + teamId, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -50,7 +51,7 @@ export default function MembersScreen() {
     async function fetchMembersOfTeam() {
       try {
         const response = await fetch(
-          "http://localhost:3001/teams/" + teamId + "/members",
+          BACK_END_BASE_URL + "/teams/" + teamId + "/members",
           {
             method: "GET",
             headers: {

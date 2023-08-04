@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { UserContext } from "../../UserContext.js";
+import { BACK_END_BASE_URL } from "../../constants/urls.js";
 
 const modalStyle = {
   position: "absolute",
@@ -41,7 +42,7 @@ export default function TeamsScreen() {
 
   async function fetchTeams() {
     try {
-      const response = await fetch("http://localhost:3001/teams", {
+      const response = await fetch(BACK_END_BASE_URL + "/teams", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +70,7 @@ export default function TeamsScreen() {
 
   async function handleCreateTeam() {
     try {
-      const response = await fetch("http://localhost:3001/teams", {
+      const response = await fetch(BACK_END_BASE_URL + "/teams", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

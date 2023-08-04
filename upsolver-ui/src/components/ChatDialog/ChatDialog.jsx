@@ -12,6 +12,8 @@ import {
 import { UserContext } from "../../UserContext";
 import { socket } from "../../socket";
 import MessageBox from "../MessageBox/MessageBox";
+import { BACK_END_BASE_URL } from "../../constants/urls.js";
+
 export default function ChatDialog({
   isChatOpen,
   setIsChatOpen,
@@ -34,7 +36,8 @@ export default function ChatDialog({
       async function fetchMessages() {
         try {
           const response = await fetch(
-            `http://localhost:3001/teams/${teamId}/problems/${activeContestProblem.problemId}/messages`,
+            BACK_END_BASE_URL +
+              `/teams/${teamId}/problems/${activeContestProblem.problemId}/messages`,
             {
               method: "GET",
               headers: {
@@ -85,7 +88,8 @@ export default function ChatDialog({
     });
     try {
       fetch(
-        `http://localhost:3001/teams/${teamId}/problems/${activeContestProblem.problemId}/messages`,
+        BACK_END_BASE_URL +
+          `/teams/${teamId}/problems/${activeContestProblem.problemId}/messages`,
         {
           method: "POST",
           headers: {

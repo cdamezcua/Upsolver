@@ -3,13 +3,14 @@ import "./LogoutButton.css";
 import { UserContext } from "../../UserContext.js";
 import { ButtonBase, Typography } from "@mui/material";
 import { Navigate } from "react-router-dom";
+import { BACK_END_BASE_URL } from "../../constants/urls.js";
 
 export default function LogoutButton() {
   const { user, updateUser } = useContext(UserContext);
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:3001/users/logout", {
+      const response = await fetch(BACK_END_BASE_URL + "/users/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -20,8 +21,7 @@ export default function LogoutButton() {
         updateUser(null);
         <Navigate to="/login" replace={true} />;
         console.log("Logout successful");
-      }
-      else {
+      } else {
         console.error("[!] Logout failed", response.status);
       }
     } catch (err) {

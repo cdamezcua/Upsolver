@@ -4,6 +4,7 @@ import { UserContext } from "../../UserContext.js";
 import "./SignupForm.css";
 import Logo from "../Logo/Logo";
 import { Paper, Box, Typography, TextField, Button } from "@mui/material";
+import { BACK_END_BASE_URL } from "../../constants/urls.js";
 
 export default function SignupForm() {
   const [username, setUsername] = useState("");
@@ -19,7 +20,7 @@ export default function SignupForm() {
   const handleSignup = async (e) => {
     try {
       e.preventDefault();
-      const response = await fetch("http://localhost:3001/users/register", {
+      const response = await fetch(BACK_END_BASE_URL + "/users/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password, cfHandle, name }),

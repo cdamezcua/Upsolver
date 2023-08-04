@@ -11,6 +11,10 @@ import progressesRoutes from "./progresses.js";
 
 const router = express.Router();
 
+router.get("/", (req, res) => {
+  res.json({ message: "Hello, World!" });
+});
+
 router.use("/teams", progressesRoutes);
 router.use("/teams", messagesRoutes);
 router.use("/teams", submissionssRoutes);

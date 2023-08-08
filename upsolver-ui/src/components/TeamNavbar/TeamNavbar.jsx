@@ -2,6 +2,7 @@ import React from "react";
 import "./TeamNavbar.css";
 import { Link } from "react-router-dom";
 import { Stack, Button } from "@mui/material";
+import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 
 export default function TeamNavbar({ teamId }) {
   return (
@@ -13,21 +14,21 @@ export default function TeamNavbar({ teamId }) {
       justifyContent="space-between"
     >
       <Stack direction="row" spacing={2}>
-        <Button variant="contained" color="primary" className="page-button">
-          <Link className="button-link" to={`/team/${teamId}/groups`}>
+        <Link className="button-link" to={`/team/${teamId}/groups`}>
+          <Button variant="contained" color="primary" className="page-button">
             Groups
-          </Link>
-        </Button>
-        <Button variant="contained" color="primary" className="page-button">
-          <Link className="button-link" to={`/team/${teamId}/members`}>
+          </Button>
+        </Link>
+        <Link className="button-link" to={`/team/${teamId}/members`}>
+          <Button variant="contained" color="primary" className="page-button">
             Members
-          </Link>
-        </Button>
-        <Button variant="contained" color="primary" className="page-button">
-          <Link className="button-link" to={`/team/${teamId}/invitations`}>
+          </Button>
+        </Link>
+        <Link className="button-link" to={`/team/${teamId}/invitations`}>
+          <Button variant="contained" color="primary" className="page-button">
             Invitations
-          </Link>
-        </Button>
+          </Button>
+        </Link>
       </Stack>
     </Stack>
   );

@@ -48,13 +48,16 @@ export default function App() {
   useEffect(() => {
     async function deletUserIfNotLoggedIn() {
       try {
-        const response = await fetch(BACK_END_BASE_URL + "/users/is-logged-in", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token": user?.token,
-          },
-        });
+        const response = await fetch(
+          BACK_END_BASE_URL + "/users/is-logged-in",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "x-access-token": user?.token,
+            },
+          }
+        );
         const data = await response.json();
         console.log("isLoggedIn response: ", data);
         if (data.isLoggedIn === false) {

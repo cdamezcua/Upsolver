@@ -16,6 +16,7 @@ import {
   Fab,
   Modal,
   TextField,
+  Alert,
 } from "@mui/material";
 import { UserContext } from "../../UserContext.js";
 import { useEffect, useContext } from "react";
@@ -157,12 +158,23 @@ export default function GroupsScreen() {
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setIsThereAlert(false);
+  };
 
   const [url, setUrl] = React.useState("");
 
+  const [isThereAlert, setIsThereAlert] = React.useState(false);
+  const [alertMessage, setAlertMessage] = React.useState("");
+  const [alertSeverity, setAlertSeverity] = React.useState("success");
+
   const handleCreateGroup = async () => {
     try {
+      setLoadingCreateGroup(true);
+      setIsThereAlert(false);
+      setAlertMessage("");
+      setAlertSeverity("success");
       const response = await fetch(
         BACK_END_BASE_URL + "/teams/" + teamId + "/groups",
         {
@@ -179,9 +191,19 @@ export default function GroupsScreen() {
         }
       );
       const data = await response.json();
-      console.log(data);
+      if (response.ok) {
+        setAlertMessage(response.statusText);
+        setAlertSeverity("success");
+      } else {
+        setAlertMessage(response.status + " " + response.statusText);
+        setAlertSeverity("error");
+      }
+      setIsThereAlert(true);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingCreateGroup(false);
+      fetchGroupsOfTeam();
     }
   };
 
@@ -305,16 +327,12 @@ export default function GroupsScreen() {
           </Table>
         </TableContainer>
       </Box>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleClose} id="create-group-modal">
         <Box sx={modalStyle}>
           <form
-            onSubmit={async (event) => {
+            onSubmit={(event) => {
               event.preventDefault();
-              setLoadingCreateGroup(true);
-              await handleCreateGroup();
-              console.log("Group created");
-              fetchGroupsOfTeam();
-              setLoadingCreateGroup(false);
+              handleCreateGroup();
             }}
           >
             <Paper sx={{ p: 2 }}>
@@ -331,6 +349,11 @@ export default function GroupsScreen() {
                 />
               </Stack>
               <Divider sx={{ my: 2 }} />
+              {isThereAlert && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                  {alertMessage}
+                </Alert>
+              )}
               <Stack direction="row" spacing={2} sx={{ justifyContent: "end" }}>
                 <LoadingButton
                   variant="contained"

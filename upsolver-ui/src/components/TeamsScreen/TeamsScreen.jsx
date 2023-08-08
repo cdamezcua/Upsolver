@@ -22,6 +22,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import { UserContext } from "../../UserContext.js";
 import { BACK_END_BASE_URL } from "../../constants/urls.js";
+import { LoadingButton } from "@mui/lab";
 
 const modalStyle = {
   position: "absolute",
@@ -77,10 +78,12 @@ export default function TeamsScreen() {
   const [isThereAlert, setIsThereAlert] = React.useState(false);
   const [alertMessage, setAlertMessage] = React.useState("");
   const [alertSeverity, setAlertSeverity] = React.useState("success");
+  const [isLoadingCreateTeam, setIsLoadingCreateTeam] = React.useState(false);
 
   async function handleCreateTeam() {
     try {
       setIsThereAlert(false);
+      setIsLoadingCreateTeam(true);
       const response = await fetch(BACK_END_BASE_URL + "/teams", {
         method: "POST",
         headers: {
@@ -105,6 +108,7 @@ export default function TeamsScreen() {
       console.log(error);
     } finally {
       fetchTeams();
+      setIsLoadingCreateTeam(false);
     }
   }
 
@@ -167,9 +171,14 @@ export default function TeamsScreen() {
                 </Alert>
               )}
               <Stack direction="row" spacing={2} sx={{ justifyContent: "end" }}>
-                <Button variant="contained" color="primary" type="submit">
+                <LoadingButton
+                  variant="contained"
+                  color="primary"
+                  loading={isLoadingCreateTeam}
+                  type="submit"
+                >
                   Create
-                </Button>
+                </LoadingButton>
               </Stack>
             </Paper>
           </form>

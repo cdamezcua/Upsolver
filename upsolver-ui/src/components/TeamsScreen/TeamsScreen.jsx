@@ -22,6 +22,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import { UserContext } from "../../UserContext.js";
 import { BACK_END_BASE_URL } from "../../constants/urls.js";
+import { LoadingButton } from "@mui/lab";
 
 const modalStyle = {
   position: "absolute",
@@ -62,14 +63,27 @@ export default function TeamsScreen() {
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setName("");
+    setUniversity("");
+    setRole("");
+    setIsThereAlert(false);
+  };
 
   const [role, setRole] = React.useState("");
   const [name, setName] = React.useState("");
   const [university, setUniversity] = React.useState("");
 
+  const [isThereAlert, setIsThereAlert] = React.useState(false);
+  const [alertMessage, setAlertMessage] = React.useState("");
+  const [alertSeverity, setAlertSeverity] = React.useState("success");
+  const [isLoadingCreateTeam, setIsLoadingCreateTeam] = React.useState(false);
+
   async function handleCreateTeam() {
     try {
+      setIsThereAlert(false);
+      setIsLoadingCreateTeam(true);
       const response = await fetch(BACK_END_BASE_URL + "/teams", {
         method: "POST",
         headers: {
@@ -82,11 +96,19 @@ export default function TeamsScreen() {
           role: role,
         }),
       });
-      const data = await response.json();
-      console.log(data);
-      fetchTeams();
+      if (response.ok) {
+        setAlertMessage(response.status + " " + response.statusText);
+        setAlertSeverity("success");
+      } else {
+        setAlertMessage(response.status + " " + response.statusText);
+        setAlertSeverity("error");
+      }
+      setIsThereAlert(true);
     } catch (error) {
       console.log(error);
+    } finally {
+      fetchTeams();
+      setIsLoadingCreateTeam(false);
     }
   }
 
@@ -143,10 +165,20 @@ export default function TeamsScreen() {
                 </Select>
               </FormControl>
               <Divider sx={{ my: 2 }} />
+              {isThereAlert && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                  {alertMessage}
+                </Alert>
+              )}
               <Stack direction="row" spacing={2} sx={{ justifyContent: "end" }}>
-                <Button variant="contained" color="primary" type="submit">
+                <LoadingButton
+                  variant="contained"
+                  color="primary"
+                  loading={isLoadingCreateTeam}
+                  type="submit"
+                >
                   Create
-                </Button>
+                </LoadingButton>
               </Stack>
             </Paper>
           </form>

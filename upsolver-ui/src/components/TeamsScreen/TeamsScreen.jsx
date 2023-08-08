@@ -89,7 +89,6 @@ export default function TeamsScreen() {
           role: role,
         }),
       });
-      const data = await response.json();
       if (response.ok) {
         setAlertMessage(response.status + " " + response.statusText);
         setAlertSeverity("success");

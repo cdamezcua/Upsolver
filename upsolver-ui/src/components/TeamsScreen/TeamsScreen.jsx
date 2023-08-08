@@ -74,6 +74,10 @@ export default function TeamsScreen() {
   const [name, setName] = React.useState("");
   const [university, setUniversity] = React.useState("");
 
+  const [isThereAlert, setIsThereAlert] = React.useState(false);
+  const [alertMessage, setAlertMessage] = React.useState("");
+  const [alertSeverity, setAlertSeverity] = React.useState("success");
+
   async function handleCreateTeam() {
     try {
       setIsThereAlert(false);
@@ -103,10 +107,6 @@ export default function TeamsScreen() {
       fetchTeams();
     }
   }
-
-  const [isThereAlert, setIsThereAlert] = React.useState(false);
-  const [alertMessage, setAlertMessage] = React.useState("");
-  const [alertSeverity, setAlertSeverity] = React.useState("success");
 
   return (
     <div className="teams-screen-container">

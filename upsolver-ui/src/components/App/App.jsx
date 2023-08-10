@@ -16,6 +16,7 @@ import ProblemsTableScreen from "../ProblemsTableScreen/ProblemsTableScreen";
 import { socket } from "../../socket";
 import ProfileScreen from "../ProfileScreen/ProfileScreen";
 import { BACK_END_BASE_URL } from "../../constants/urls.js";
+import LoginScreen from "../LoginScreen/LoginScreen";
 
 export default function App() {
   const [user, setUser] = useState(() => {
@@ -83,17 +84,7 @@ export default function App() {
                 />
               }
             />
-            <Route
-              path="login"
-              element={
-                <Container
-                  maxWidth="gx"
-                  sx={{ display: "flex", justifyContent: "center" }}
-                >
-                  <LoginForm />
-                </Container>
-              }
-            />
+            <Route path="login" element={<LoginScreen />} />
             <Route
               path="signup"
               element={
